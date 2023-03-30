@@ -1,0 +1,25 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Sat Mar 18 22:25:55 2023
+# Process ID: 35556
+# Current directory: C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent35948 C:\Users\Isaac\OneDrive\Bureau\Hearc\Di Applied\Vivado_nanoProcesseur\Vivado_nanoProcesseur.xpr
+# Log file: C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur/vivado.log
+# Journal file: C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project {C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur/Vivado_nanoProcesseur.xpr}
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+launch_simulation
+launch_simulation
+source testbench.tcl
+run 40 us
+save_wave_config {C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur/testbench_behav.wcfg}
+add_files -fileset sim_1 -norecurse {{C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur/testbench_behav.wcfg}}
+set_property xsim.view {{C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur/testbench_behav.wcfg}} [get_filesets sim_1]
+close_sim

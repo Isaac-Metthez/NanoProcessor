@@ -1,0 +1,23 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/nanoProcesseur_package.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/ALU.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/Address_Decode.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/Data_Multiplexer.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/Instruction_Register.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/Operandes_Multiplexer.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/Operandes_Register.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/Output_Register.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/Program_Counter.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/RAM.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/new/Variables.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/ROM.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/Sequenceur.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/Status_Register.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/W_Register.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/nanoControleur.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sources_1/imports/design.hdl/nanoProcesseur.vhd" \
+"../../../../Vivado_nanoProcesseur.srcs/sim_1/imports/Sys Di/testbench.vhd" \
+
+# Do not sort compile order
+nosort

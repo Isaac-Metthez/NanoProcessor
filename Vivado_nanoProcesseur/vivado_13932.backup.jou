@@ -1,0 +1,333 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Fri Mar 17 15:42:10 2023
+# Process ID: 13932
+# Current directory: C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent5192 C:\Users\Isaac\OneDrive\Bureau\Hearc\Di Applied\Vivado_nanoProcesseur\Vivado_nanoProcesseur.xpr
+# Log file: C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur/vivado.log
+# Journal file: C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project {C:/Users/Isaac/OneDrive/Bureau/Hearc/Di Applied/Vivado_nanoProcesseur/Vivado_nanoProcesseur.xpr}
+update_compile_order -fileset sources_1
+launch_simulation
+source testbench.tcl
+run 10 us
+run 10 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+close_sim
+launch_simulation
+launch_simulation
+source testbench.tcl
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 10 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+run 10000 us
+run 10000 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 100 us
+run 100 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 100 us
+run 100 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 100 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 100 us
+restart
+run all
+restart
+run 20 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+run 20 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+run 20 us
+run 40 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 20 us
+run 05 us
+run 05 us
+run 05 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 40 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 40 us
+run 40 us
+run 40 us
+run 40 us
+run 40 us
+run 40 us
+run 40 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 40 us
+run 40 us
+run 40 us
+run 40 us
+run 40 us
+run 40 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 40 us
+close_sim
+launch_simulation
+launch_simulation
+source testbench.tcl
+run 40 us
+run 40 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 40 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 40 us
+close_sim
+launch_simulation
+source testbench.tcl
+run 40 us
+close_sim
