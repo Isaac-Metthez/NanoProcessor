@@ -1,3 +1,3 @@
 # NanoProcessor
 
-##Add functions to alu
+## Add functions to alu
