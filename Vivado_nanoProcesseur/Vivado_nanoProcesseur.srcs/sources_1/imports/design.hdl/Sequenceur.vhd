@@ -30,6 +30,7 @@ entity Sequenceur is
     reset_i     : in     std_logic;
     PC_inc_o    : out    std_logic;
     PC_load_o   : out    std_logic;
+    PC_source_o : out    std_logic;
     IR_load_o   : out    std_logic;
     opcode_i    : in     std_logic_vector(5 downto 0);
     CCR_i       : in     std_logic_vector(3 downto 0);
@@ -87,6 +88,7 @@ end process;
 --ASSIGNATION COMBINATOIRE DES SORTIE EN FONCTION DE L'ETAT (STATE) et pour certaines sorties des entrées
 
 PC_load_o <= '1' WHEN state = sOPCODE_DECODE ELSE '0';
+PC_source_o <= '1' WHEN opcode_i = RTS ELSE '0' ;
 
 IR_load_o <= '1' WHEN state = sIR_LOAD ELSE '0';
 
@@ -103,6 +105,8 @@ begin
 		
         case opcode_i is          
           when BRA =>
+            PC_inc_o <= '0';
+          when RTS =>
             PC_inc_o <= '0';
           when BZ0 =>
             if CCR_i(Zidx) = '0' then

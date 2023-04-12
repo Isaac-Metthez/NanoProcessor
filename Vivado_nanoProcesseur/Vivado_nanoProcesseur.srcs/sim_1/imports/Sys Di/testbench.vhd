@@ -17,7 +17,7 @@ component nanoControleur is
   port (
     clk_i    : in     std_logic;
     reset_i  : in     std_logic;
-    port_a_i : in     std_logic_vector(3 downto 0);
+    port_a_i : in     std_logic_vector(7 downto 0);
     port_a_o : out    std_logic_vector(7 downto 0);
     port_b_i : in     std_logic_vector(7 downto 0);
     port_b_o : out    std_logic_vector(7 downto 0);
@@ -55,7 +55,7 @@ uut: nanoControleur
   port map(
     clk_i       => clk_i ,
     reset_i     => reset_i ,
-    port_a_i    => port_a_i(3 downto 0) , 
+    port_a_i    => port_a_i , 
     port_a_o    => port_a_o, 
     port_b_i    => port_b_i , 
     port_b_o    => port_b_o,

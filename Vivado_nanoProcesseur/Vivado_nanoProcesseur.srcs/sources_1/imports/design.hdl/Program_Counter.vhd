@@ -26,12 +26,14 @@ use ieee.std_logic_1164.all;
 
 entity Program_Counter is
   port (
-    clk_i     : in     std_logic;
-    reset_i   : in     std_logic;
-    PC_load_i : in     std_logic;
-    PC_o      : out    std_logic_vector(7 downto 0);
-    PC_inc_i  : in     std_logic;
-    addr_i    : in     std_logic_vector(7 downto 0));
+    clk_i       : in     std_logic;
+    reset_i     : in     std_logic;
+    PC_load_i   : in     std_logic;
+    PC_source_i : in     std_logic;
+    PC_o        : out    std_logic_vector(7 downto 0);
+    PC_inc_i    : in     std_logic;
+    addr_i      : in     std_logic_vector(7 downto 0);
+    accu_i      : in     std_logic_vector(7 downto 0));
 end entity Program_Counter;
 
 --------------------------------------------------------------------------------
@@ -41,7 +43,7 @@ end entity Program_Counter;
 
 architecture Behavioral of Program_Counter is
     
- SIGNAL PC_counter : std_logic_vector(7 DOWNTO 0);
+SIGNAL PC_counter : std_logic_vector(7 DOWNTO 0);
   
 begin
 
@@ -53,7 +55,11 @@ begin
     if PC_inc_i = '1' THEN
     	PC_counter <= STD_LOGIC_VECTOR(UNSIGNED(PC_counter) + 1);
     elsif PC_load_i = '1' then
-    	PC_counter <= addr_i;	  
+        if  PC_source_i = '1' then
+    	   PC_counter <= accu_i;	  
+    	else
+    	   PC_counter <= addr_i;
+    	end if;   
     end if;
   end if;
 end process;

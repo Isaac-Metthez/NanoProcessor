@@ -47,6 +47,7 @@ architecture Structural of nanoProcesseur is
   signal oper_sel_o  : std_logic_vector(2 downto 0);
   signal ALU_o       : std_logic_vector(7 downto 0);
   signal PC_load_o   : std_logic;
+  signal PC_source_o : std_logic;
   signal PC_inc_o    : std_logic;
   signal IR_load_o   : std_logic;
   signal opcode_o    : std_logic_vector(5 downto 0);
@@ -67,6 +68,7 @@ architecture Structural of nanoProcesseur is
       reset_i     : in     std_logic;
       PC_inc_o    : out    std_logic;
       PC_load_o   : out    std_logic;
+      PC_source_o : out    std_logic;
       IR_load_o   : out    std_logic;
       opcode_i    : in     std_logic_vector(5 downto 0);
       CCR_i       : in     std_logic_vector(3 downto 0);
@@ -79,12 +81,14 @@ architecture Structural of nanoProcesseur is
 
   component Program_Counter
     port (
-      clk_i     : in     std_logic;
-      reset_i   : in     std_logic;
-      PC_load_i : in     std_logic;
-      PC_o      : out    std_logic_vector(7 downto 0);
-      PC_inc_i  : in     std_logic;
-      addr_i    : in     std_logic_vector(7 downto 0));
+        clk_i       : in     std_logic;
+        reset_i     : in     std_logic;
+        PC_load_i   : in     std_logic;
+        PC_source_i : in     std_logic;
+        PC_o        : out    std_logic_vector(7 downto 0);
+        PC_inc_i    : in     std_logic;
+        addr_i      : in     std_logic_vector(7 downto 0);
+        accu_i      : in     std_logic_vector(7 downto 0));
   end component Program_Counter;
 
   component Instruction_Register
@@ -156,6 +160,7 @@ begin
       reset_i     => reset_i,
       PC_inc_o    => PC_inc_o,
       PC_load_o   => PC_load_o,
+      PC_source_o => PC_source_o,
       IR_load_o   => IR_load_o,
       opcode_i    => opcode_o,
       CCR_i       => CCR_o,
@@ -170,10 +175,12 @@ begin
       clk_i     => clk_i,
       reset_i   => reset_i,
       PC_load_i => PC_load_o,
+      PC_source_i  => PC_source_o,
       PC_o      => PC_o,
       PC_inc_i  => PC_inc_o,
-      addr_i    => addr_o_net);
-
+      addr_i    => addr_o_net,
+      accu_i    => data_o_net);
+      
   IR_inst: Instruction_Register
     port map(
       clk_i      => clk_i,
