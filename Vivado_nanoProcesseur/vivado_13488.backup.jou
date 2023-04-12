@@ -1,0 +1,22 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Thu Apr  6 10:20:16 2023
+# Process ID: 13488
+# Current directory: C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent12856 C:\Users\Isaac\OneDrive\Bureau\Project\NanoProcessor\Vivado_nanoProcesseur\Vivado_nanoProcesseur.xpr
+# Log file: C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/vivado.log
+# Journal file: C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur\vivado.jou
+#-----------------------------------------------------------
+start_guopopen_project C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/Vivado_nanoProcesseur.xpupdate_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_simulation
+launch_simulation
+launch_simulation
+open_wave_config C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/testbench_behav.wcfg
+source testbench.tcl
+run 40 us
+close_sim
