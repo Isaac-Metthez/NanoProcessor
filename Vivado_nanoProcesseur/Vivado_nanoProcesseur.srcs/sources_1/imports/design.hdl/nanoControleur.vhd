@@ -28,7 +28,7 @@ entity nanoControleur is
   port (
     clk_i    : in     std_logic;
     reset_i  : in     std_logic;
-    port_a_i : in     std_logic_vector(7 downto 0);
+    port_a_i : in     std_logic_vector(3 downto 0);
     port_a_o : out    std_logic_vector(7 downto 0);
     port_b_i : in     std_logic_vector(7 downto 0);
     port_b_o : out    std_logic_vector(7 downto 0);
@@ -54,7 +54,8 @@ architecture Structural of nanoControleur is
   signal cs_port_a_i                 : std_logic;
   signal cs_port_b_i                 : std_logic;
   signal cs_ram_i                    : std_logic;
-
+  signal TEST                      : std_logic_vector(7  downto 0);
+  
   component nanoProcesseur
     port (
       clk_i     : in     std_logic;
@@ -116,7 +117,8 @@ begin
 
 
   PCounter_o <= PC_o;
-
+    tEST <=  port_a_i & "0000";
+    
   nPr_inst: nanoProcesseur
     port map(
       clk_i     => clk_i,
@@ -136,7 +138,7 @@ begin
   Data_Mux_inst: Data_Multiplexer
     port map(
       RAM_data_i    => data_o,
-      port_a_data_i => port_a_i,
+      port_a_data_i => Test,
       port_b_data_i => port_b_i,
       data_o        => RAM_PORT_select_inst_data_o,
       cs_ram_i      => cs_ram_i,
