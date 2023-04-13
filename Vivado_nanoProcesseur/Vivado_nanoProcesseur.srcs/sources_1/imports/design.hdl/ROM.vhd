@@ -45,9 +45,13 @@ begin
 with pc_i select
   ir_o <= 
   
--- test RTS
+-- test RTS and LOADindconst
          LOADconst 	& X"60"            when	X"00", 
-         RTS        & none             when	X"01", 
+         STOREaddr 	& usiMulA          when	X"01", -- one byte after usiMulA in mem
+         LOADconst 	& usiMulB          when	X"02", 
+         STOREaddr  & PortA            when	X"03", 
+         LOADindconst& X"FF"           when X"04", -- FF = -1
+         RTS        & none             when	X"05", 
          STOREaddr  & PortA            when	X"60",     
   
 --  -- set port a, b, output to 0

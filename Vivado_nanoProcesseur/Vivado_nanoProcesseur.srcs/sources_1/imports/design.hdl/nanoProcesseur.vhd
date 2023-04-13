@@ -98,6 +98,7 @@ architecture Structural of nanoProcesseur is
       IR_load_i  : in     std_logic;
       IR_i       : in     std_logic_vector(13 downto 0);
       operande_o : out    std_logic_vector(7 downto 0);
+      accu_i     : in     std_logic_vector(7 downto 0);
       opcode_o   : out    std_logic_vector(5 downto 0));
   end component Instruction_Register;
 
@@ -188,6 +189,7 @@ begin
       IR_load_i  => IR_load_o,
       IR_i       => IR_i,
       operande_o => addr_o_net,
+      accu_i     => data_o_net,
       opcode_o   => opcode_o);
 
   OM_inst: Operandes_Multiplexer

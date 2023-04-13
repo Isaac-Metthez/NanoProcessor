@@ -167,6 +167,7 @@ begin
             oper_sel_o <= MUX_CONST;
 
           when LOADaddr |
+               LOADindconst |
                INCaddr  |
                DECaddr  |
                NEGaddr    =>
@@ -196,6 +197,7 @@ begin
 	if state = sOPCODE_DECODE then
 		case opcode_i is
           when LOADaddr | LOADconst |
+               LOADindconst |
                ANDconst | ANDaddr   | 
                ORconst  | ORaddr    |
                XORconst | XORaddr   |
@@ -221,6 +223,7 @@ begin
 	if state = sOPCODE_DECODE then
 		case opcode_i is
           when LOADaddr | LOADconst |
+               LOADindconst |
                ANDconst | ANDaddr   | 
                ORconst  | ORaddr    |
                XORconst | XORaddr   |

@@ -69,7 +69,7 @@ package nanoProcesseur_package is
   constant BN1        : std_logic_vector(5 downto 0) := "100001";       
   constant BRA        : std_logic_vector(5 downto 0) := "100010";  
   constant RTS        : std_logic_vector(5 downto 0) := "100011";
-  constant LOADind    : std_logic_vector(5 downto 0) := "100100";
+  constant LOADindconst: std_logic_vector(5 downto 0):= "100100";
   
   constant NOP        : std_logic_vector(5 downto 0) := "111111";
 

@@ -57,7 +57,7 @@ begin
   CCR_mask      <= (others => '0'); -- valeur par défaut
   
   case opcode_i is
-    when LOADconst | LOADaddr =>   
+    when LOADconst | LOADaddr | LOADindconst =>   
       uALU_C <= '0' & operande1_i;
       CCR_mask(Zidx) <= '1';
       CCR_mask(Nidx) <= '1';
