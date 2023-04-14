@@ -1,0 +1,7 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"testbench_func_impl.vhd" \
+"../../../../../Vivado_nanoProcesseur.srcs/sim_1/imports/Sys Di/testbench.vhd" \
+
+# Do not sort compile order
+nosort

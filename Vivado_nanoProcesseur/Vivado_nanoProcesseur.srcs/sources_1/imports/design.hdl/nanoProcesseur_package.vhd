@@ -70,6 +70,9 @@ package nanoProcesseur_package is
   constant BRA        : std_logic_vector(5 downto 0) := "100010";  
   constant RTS        : std_logic_vector(5 downto 0) := "100011";
   constant LOADindconst: std_logic_vector(5 downto 0):= "100100";
+  constant TFR        : std_logic_vector(5 downto 0) := "100101";
+  constant MULUconst  : std_logic_vector(5 downto 0) := "100110";
+  constant MULUaddr   : std_logic_vector(5 downto 0) := "100111";
   
   constant NOP        : std_logic_vector(5 downto 0) := "111111";
 
@@ -79,6 +82,8 @@ package nanoProcesseur_package is
   constant MUX_DATA          : std_logic_vector(2 downto 0) := "010";  
   constant MUX_ACCU_CONST    : std_logic_vector(2 downto 0) := "101";
   constant MUX_ACCU_DATA     : std_logic_vector(2 downto 0) := "110";
+  constant MUX_SECACCU       : std_logic_vector(2 downto 0) := "111";
+  
   
   -- Index des indicateurs de controle
   constant Zidx : integer := 3;

@@ -1,0 +1,16 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Thu Apr 13 22:34:07 2023
+# Process ID: 33192
+# Current directory: C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent29472 C:\Users\Isaac\OneDrive\Bureau\Project\NanoProcessor\Vivado_nanoProcesseur\Vivado_nanoProcesseur.xpr
+# Log file: C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/vivado.log
+# Journal file: C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/Vivado_nanoProcesseur.xpr
+update_compile_order -fileset sources_1
+launch_simulation
+launch_simulation

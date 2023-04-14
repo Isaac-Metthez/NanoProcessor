@@ -26,19 +26,20 @@ use ieee.std_logic_1164.all;
 
 entity Sequenceur is
   port (
-    clk_i       : in     std_logic;
-    reset_i     : in     std_logic;
-    PC_inc_o    : out    std_logic;
-    PC_load_o   : out    std_logic;
-    PC_source_o : out    std_logic;
-    IR_load_o   : out    std_logic;
-    opcode_i    : in     std_logic_vector(5 downto 0);
-    CCR_i       : in     std_logic_vector(3 downto 0);
-    oper_sel_o  : out    std_logic_vector(2 downto 0);
-    oper_load_o : out    std_logic;
-    Accu_load_o : out    std_logic;
-    CCR_load_o  : out    std_logic;
-    data_wr_o   : out    std_logic);
+    clk_i           : in     std_logic;
+    reset_i         : in     std_logic;
+    PC_inc_o        : out    std_logic;
+    PC_load_o       : out    std_logic;
+    PC_source_o     : out    std_logic;
+    IR_load_o       : out    std_logic;
+    opcode_i        : in     std_logic_vector(5 downto 0);
+    CCR_i           : in     std_logic_vector(3 downto 0);
+    oper_sel_o      : out    std_logic_vector(2 downto 0);
+    oper_load_o     : out    std_logic;
+    Accu_load_o     : out    std_logic;
+    SecAccu_load_o  : out    std_logic;
+    CCR_load_o      : out    std_logic;
+    data_wr_o       : out    std_logic);
 end entity Sequenceur;
 
 --------------------------------------------------------------------------------
@@ -175,13 +176,16 @@ begin
             
           -- 2 opérandes
        	  when ANDconst | ORconst   | XORconst |
-               ADDconst | ADCconst  =>
+               ADDconst | ADCconst  | MULUconst =>
             oper_sel_o <= MUX_ACCU_CONST;
 
        	  when ANDaddr | ORaddr   | XORaddr |
-               ADDaddr | ADCaddr  =>
+               ADDaddr | ADCaddr  | MULUaddr =>
             oper_sel_o <= MUX_ACCU_DATA;
               
+          when TFR =>
+            oper_sel_o <= MUX_SECACCU;    
+
           when others =>
             oper_sel_o <= (others => '0');  
         end case;
@@ -203,9 +207,11 @@ begin
                XORconst | XORaddr   |
                RORaccu  | ROLaccu   |
                ADDconst | ADDaddr   | ADCaddr | ADCconst |
+               MULUconst|MULUaddr   |
                INCaccu  | INCaddr   |
                DECaccu  | DECaddr   |
-               NEGaccu  | NEGaddr   | NEGconst =>
+               NEGaccu  | NEGaddr   | NEGconst |
+               TFR      =>
           	Accu_load_o <= '1'; 
             
           when others =>
@@ -214,6 +220,20 @@ begin
           end case;
 	else
 	   Accu_load_o <= '0';
+	end if;
+	
+	
+	if state = sOPCODE_DECODE then
+	   case opcode_i is
+          when MULUconst | MULUaddr =>
+          	SecAccu_load_o <= '1'; 
+            
+          when others =>
+          	SecAccu_load_o <= '0'; 
+          	
+          end case;
+	else
+	   SecAccu_load_o <= '0';
 	end if;
 end process;
 
@@ -229,9 +249,11 @@ begin
                XORconst | XORaddr   |
                RORaccu  | ROLaccu   |
                ADDconst | ADDaddr   | ADCaddr | ADCconst |
+               MULUconst| MULUaddr  |
                INCaccu  | INCaddr   |
                DECaccu  | DECaddr   |
-               NEGaccu  | NEGaddr   | NEGconst =>
+               NEGaccu  | NEGaddr   | NEGconst |
+               TFR =>
           	CCR_load_o <= '1';
           	
           when SETC | CLRC | TRFNC =>
@@ -244,6 +266,7 @@ begin
 	else
 	   CCR_load_o <= '0';
 	end if;
+
 end process;
 	         
 
