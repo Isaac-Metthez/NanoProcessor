@@ -44,27 +44,48 @@ begin
 
 with pc_i select
   ir_o <= 
--- test MULUconst 
-         LOADconst 	& X"FF"            when	X"00", 
+
+--------------------------------------------------------------------------------
+--MAIN--------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+         LOADconst 	& X"81"            when	X"00", 
          MULUconst 	& X"FF"            when	X"01", 
-         STOREaddr  & PortB            when	X"02", 
-         TFR        & none             when	X"03", 
+         STOREsecaccu&none            when	X"02", 
+         LOADaddr & X"80"             when	X"03", 
          STOREaddr  & PortA            when	X"04",
+
+--         DECaddr    & S                 when	MAIN,
+--         STOREindconst&  
+--         STOREaddr  & usiMulA           when	X"11", 
+--         STOREaddr  & usiMemPorta       when	X"06",
   
----- test RTS and LOADindconst
---         LOADconst 	& X"60"            when	X"00", 
---         STOREaddr 	& usiMulA          when	X"01", -- one byte after usiMulA in mem
---         LOADconst 	& usiMulB          when	X"02", 
---         STOREaddr  & PortA            when	X"03", 
---         LOADindconst& X"FF"           when X"04", -- FF = -1
---         RTS        & none             when	X"05", 
---         STOREaddr  & PortA            when	X"60",     
   
---  -- set port a, b, output to 0
---         LOADconst 	& X"00"            when	X"00", 
---         STOREaddr  & PortA            when	X"01",   
---         STOREaddr  & PortB            when	X"02",  
---         NOP        & None             when	X"03",  
+  
+  
+  
+  
+--------------------------------------------------------------------------------
+  
+  
+  
+------ test MULUconst 
+----         LOADconst 	& X"FF"            when	X"00", 
+----         MULUconst 	& X"FF"            when	X"01", 
+----         STOREaddr  & PortB            when	X"02", 
+----         TFR        & none             when	X"03", 
+----         STOREaddr  & PortA            when	X"04",
+  
+------ test RTS and LOADindconst
+----         LOADconst 	& X"60"            when	X"00", 
+----         STOREaddr 	& usiMulA          when	X"01", -- one byte after usiMulA in mem
+----         LOADconst 	& usiMulB          when	X"02", 
+----         STOREaddr  & PortA            when	X"03", 
+----         LOADindconst& X"FF"           when X"04", -- FF = -1
+----         RTS        & none             when	X"05", 
+----         STOREaddr  & PortA            when	X"60",     
+
+         
          
 ---- Prepare values that are multiplied 
 ----         LOADconst  & X"FF"             when	X"04",  -- by const
@@ -76,6 +97,10 @@ with pc_i select
 ----         LOADconst  & X"FF"             when	X"06",  -- by hexa const
 ----         LOADconst  & std_logic_vector(to_unsigned(255,8))       when	X"06",  -- by uint const
 --         LOADaddr   & PortB             when	X"07",       
+--         STOREaddr  & usiMulB           when	X"08", 
+--         STOREaddr  & usiMemPortb       when	X"09",      
+         
+--         LOADaddr   & PortC             when	X"07",       
 --         STOREaddr  & usiMulB           when	X"08", 
 --         STOREaddr  & usiMemPortb       when	X"09",      
          
@@ -241,6 +266,21 @@ with pc_i select
 --         BZ0       	& X"00"             when	X"75",            
 --         BRA       	& X"70"             when	X"76",
        
+       
+--------------------------------------------------------------------------------
+----Prgram init-----------------------------------------------------------------
+----------------------------------------------------------------------------------
+--  -- set port a, b, c output to 0
+--         LOADconst 	& X"00"             when	X"00", 
+--         STOREaddr  & PortA             when	X"01",   
+--         STOREaddr  & PortB             when	X"02",  
+--         STOREaddr  & PortC             when	X"03",  
+--  -- init stack                                
+--         LOADaddr 	& S                 when	X"04", 
+--         STOREaddr 	& S                 when	X"05",
+--  -- branch to main
+--         BRA 	    & MAIN              when	X"06", 
+----------------------------------------------------------------------------------  
 ---- end         
          BRA		& X"FF"             when 	others;  
 

@@ -95,7 +95,8 @@ IR_load_o <= '1' WHEN state = sIR_LOAD ELSE '0';
 
 oper_load_o <= '1' WHEN state = sIR_DECODE ELSE '0';
 
-data_wr_o <= '1' WHEN state = sOPCODE_DECODE AND opcode_i = STOREaddr ELSE '0'; 
+data_wr_o <= '1' WHEN state = sOPCODE_DECODE AND opcode_i = STOREaddr  ELSE '1'
+                 WHEN state = sOPCODE_DECODE AND opcode_i = STOREsecaccu ELSE '0'; 
 
 -- PC_inc_o
 P2:process(state,opcode_i,CCR_i)
@@ -183,7 +184,7 @@ begin
                ADDaddr | ADCaddr  | MULUaddr =>
             oper_sel_o <= MUX_ACCU_DATA;
               
-          when TFR =>
+          when TFRsecaccu =>
             oper_sel_o <= MUX_SECACCU;    
 
           when others =>
@@ -211,7 +212,7 @@ begin
                INCaccu  | INCaddr   |
                DECaccu  | DECaddr   |
                NEGaccu  | NEGaddr   | NEGconst |
-               TFR      =>
+               TFRsecaccu      =>
           	Accu_load_o <= '1'; 
             
           when others =>
@@ -253,7 +254,7 @@ begin
                INCaccu  | INCaddr   |
                DECaccu  | DECaddr   |
                NEGaccu  | NEGaddr   | NEGconst |
-               TFR =>
+               TFRsecaccu =>
           	CCR_load_o <= '1';
           	
           when SETC | CLRC | TRFNC =>

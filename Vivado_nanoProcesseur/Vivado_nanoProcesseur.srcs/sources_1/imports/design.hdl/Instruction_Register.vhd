@@ -32,6 +32,7 @@ entity Instruction_Register is
     IR_i       : in     std_logic_vector(13 downto 0);
     operande_o : out    std_logic_vector(7 downto 0);
     accu_i     : in     std_logic_vector(7 downto 0);
+    secaccu_i  : in     std_logic_vector(7 downto 0);
     opcode_o   : out    std_logic_vector(5 downto 0));
 end entity Instruction_Register;
 
@@ -54,6 +55,8 @@ begin
       opcode_o <= IR_i(13 DOWNTO 8);
       if IR_i(13 DOWNTO 8) = LOADindconst then
         operande_o <= STD_LOGIC_VECTOR(SIGNED(IR_i(7 DOWNTO 0))+ SIGNED(accu_i));
+      elsif IR_i(13 DOWNTO 8) = STOREsecaccu then
+        operande_o <= STD_LOGIC_VECTOR(SIGNED(IR_i(7 DOWNTO 0))+ SIGNED(secaccu_i));
       else
         operande_o <= IR_i(7 DOWNTO 0);
       end if;

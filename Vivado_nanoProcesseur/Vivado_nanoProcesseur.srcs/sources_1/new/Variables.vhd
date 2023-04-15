@@ -25,6 +25,7 @@ use ieee.std_logic_1164.all;
 package variables is
  
  -- Variables 
+  constant S                   : std_logic_vector(7 downto 0) := X"9F";
   constant usiMulA             : std_logic_vector(7 downto 0) := X"80";
   constant usiMulB             : std_logic_vector(7 downto 0) := X"81";
   constant usiTempMul          : std_logic_vector(7 downto 0) := X"82";
@@ -38,6 +39,10 @@ package variables is
   constant None                : std_logic_vector(7 downto 0) := X"00";
   constant PortA               : std_logic_vector(7 downto 0) := X"20";
   constant PortB               : std_logic_vector(7 downto 0) := X"21";
+  constant PortC               : std_logic_vector(7 downto 0) := X"21";
+  
+  -- Entry
+  constant MAIN                : std_logic_vector(7 downto 0) := X"10";
   
 end package variables ;
 package body variables is

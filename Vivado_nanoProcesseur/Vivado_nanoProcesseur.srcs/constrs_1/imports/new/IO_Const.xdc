@@ -50,19 +50,19 @@ set_property PACKAGE_PIN AB22  [get_ports PCounter_o[5]]; set_property IOSTANDAR
 set_property PACKAGE_PIN AA21  [get_ports PCounter_o[6]]; set_property IOSTANDARD LVCMOS33 [get_ports PCounter_o[6]]
 set_property PACKAGE_PIN AB21  [get_ports PCounter_o[7]]; set_property IOSTANDARD LVCMOS33 [get_ports PCounter_o[7]]
 set_property PACKAGE_PIN T18   [get_ports reset_i];       set_property IOSTANDARD LVCMOS33 [get_ports reset_i]
+set_property PACKAGE_PIN U21   [get_ports port_c_4i[0]];  set_property IOSTANDARD LVCMOS33 [get_ports port_c_4i[0]]
+set_property PACKAGE_PIN V20   [get_ports port_c_4i[1]];  set_property IOSTANDARD LVCMOS33 [get_ports port_c_4i[1]]
+set_property PACKAGE_PIN W20   [get_ports port_c_4i[2]];  set_property IOSTANDARD LVCMOS33 [get_ports port_c_4i[2]]
+set_property PACKAGE_PIN U20   [get_ports port_c_4i[3]];  set_property IOSTANDARD LVCMOS33 [get_ports port_c_4i[3]]
 
-
-
-
-
-
-
-
-
-
-
-
-
+set_property PACKAGE_PIN A18   [get_ports port_c_o[0]];   set_property IOSTANDARD LVCMOS33 [get_ports port_c_o[0]]
+set_property PACKAGE_PIN B20   [get_ports port_c_o[1]];   set_property IOSTANDARD LVCMOS33 [get_ports port_c_o[1]]
+set_property PACKAGE_PIN A20   [get_ports port_c_o[2]];   set_property IOSTANDARD LVCMOS33 [get_ports port_c_o[2]]
+set_property PACKAGE_PIN B21   [get_ports port_c_o[3]];   set_property IOSTANDARD LVCMOS33 [get_ports port_c_o[3]]
+set_property PACKAGE_PIN B16   [get_ports port_c_o[4]];   set_property IOSTANDARD LVCMOS33 [get_ports port_c_o[4]]
+set_property PACKAGE_PIN B18   [get_ports port_c_o[5]];   set_property IOSTANDARD LVCMOS33 [get_ports port_c_o[5]]
+set_property PACKAGE_PIN A19   [get_ports port_c_o[6]];   set_property IOSTANDARD LVCMOS33 [get_ports port_c_o[6]]
+set_property PACKAGE_PIN A21   [get_ports port_c_o[7]];   set_property IOSTANDARD LVCMOS33 [get_ports port_c_o[7]]
 
 
 

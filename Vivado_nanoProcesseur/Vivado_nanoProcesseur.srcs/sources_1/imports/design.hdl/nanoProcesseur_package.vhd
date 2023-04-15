@@ -34,47 +34,51 @@ package nanoProcesseur_package is
   constant ADDR_BUS_WIDTH   : integer := OPERANDE_BUS_WIDTH;
   
  -- Instructions
-  constant STOREaddr  : std_logic_vector(5 downto 0) := "000001";
-  constant LOADconst  : std_logic_vector(5 downto 0) := "000010";
-  constant LOADaddr   : std_logic_vector(5 downto 0) := "000011";
-  constant ANDconst   : std_logic_vector(5 downto 0) := "000100";
-  constant ANDaddr    : std_logic_vector(5 downto 0) := "000101";
-  constant ORconst    : std_logic_vector(5 downto 0) := "000110";
-  constant ORaddr     : std_logic_vector(5 downto 0) := "000111";
-  constant XORconst   : std_logic_vector(5 downto 0) := "001000";
-  constant XORaddr    : std_logic_vector(5 downto 0) := "001001";
-  constant ROLaccu    : std_logic_vector(5 downto 0) := "001010";
-  constant RORaccu    : std_logic_vector(5 downto 0) := "001011";
-  constant ADDconst   : std_logic_vector(5 downto 0) := "001100";
-  constant ADDaddr    : std_logic_vector(5 downto 0) := "001101";
-  constant ADCconst   : std_logic_vector(5 downto 0) := "001110";
-  constant ADCaddr    : std_logic_vector(5 downto 0) := "001111";
-  constant NEGaccu    : std_logic_vector(5 downto 0) := "010000";
-  constant NEGconst   : std_logic_vector(5 downto 0) := "010001";
-  constant NEGaddr    : std_logic_vector(5 downto 0) := "010010";
-  constant INCaccu    : std_logic_vector(5 downto 0) := "010011";
-  constant INCaddr    : std_logic_vector(5 downto 0) := "010100";
-  constant DECaccu    : std_logic_vector(5 downto 0) := "010101";
-  constant DECaddr    : std_logic_vector(5 downto 0) := "010110";
-  constant SETC       : std_logic_vector(5 downto 0) := "010111";
-  constant CLRC       : std_logic_vector(5 downto 0) := "011000";
-  constant TRFNC      : std_logic_vector(5 downto 0) := "011001";
-  constant BZ0        : std_logic_vector(5 downto 0) := "011010";
-  constant BZ1        : std_logic_vector(5 downto 0) := "011011";
-  constant BC0        : std_logic_vector(5 downto 0) := "011100";
-  constant BC1        : std_logic_vector(5 downto 0) := "011101";
-  constant BV0        : std_logic_vector(5 downto 0) := "011110";
-  constant BV1        : std_logic_vector(5 downto 0) := "011111";       
-  constant BN0        : std_logic_vector(5 downto 0) := "100000";       
-  constant BN1        : std_logic_vector(5 downto 0) := "100001";       
-  constant BRA        : std_logic_vector(5 downto 0) := "100010";  
-  constant RTS        : std_logic_vector(5 downto 0) := "100011";
-  constant LOADindconst: std_logic_vector(5 downto 0):= "100100";
-  constant TFR        : std_logic_vector(5 downto 0) := "100101";
-  constant MULUconst  : std_logic_vector(5 downto 0) := "100110";
-  constant MULUaddr   : std_logic_vector(5 downto 0) := "100111";
+  constant STOREaddr    : std_logic_vector(5 downto 0) := "000001";
+  constant LOADconst    : std_logic_vector(5 downto 0) := "000010";
+  constant LOADaddr     : std_logic_vector(5 downto 0) := "000011";
+  constant ANDconst     : std_logic_vector(5 downto 0) := "000100";
+  constant ANDaddr      : std_logic_vector(5 downto 0) := "000101";
+  constant ORconst      : std_logic_vector(5 downto 0) := "000110";
+  constant ORaddr       : std_logic_vector(5 downto 0) := "000111";
+  constant XORconst     : std_logic_vector(5 downto 0) := "001000";
+  constant XORaddr      : std_logic_vector(5 downto 0) := "001001";
+  constant ROLaccu      : std_logic_vector(5 downto 0) := "001010";
+  constant RORaccu      : std_logic_vector(5 downto 0) := "001011";
+  constant ADDconst     : std_logic_vector(5 downto 0) := "001100";
+  constant ADDaddr      : std_logic_vector(5 downto 0) := "001101";
+  constant ADCconst     : std_logic_vector(5 downto 0) := "001110";
+  constant ADCaddr      : std_logic_vector(5 downto 0) := "001111";
+  constant NEGaccu      : std_logic_vector(5 downto 0) := "010000";
+  constant NEGconst     : std_logic_vector(5 downto 0) := "010001";
+  constant NEGaddr      : std_logic_vector(5 downto 0) := "010010";
+  constant INCaccu      : std_logic_vector(5 downto 0) := "010011";
+  constant INCaddr      : std_logic_vector(5 downto 0) := "010100";
+  constant DECaccu      : std_logic_vector(5 downto 0) := "010101";
+  constant DECaddr      : std_logic_vector(5 downto 0) := "010110";
+  constant SETC         : std_logic_vector(5 downto 0) := "010111";
+  constant CLRC         : std_logic_vector(5 downto 0) := "011000";
+  constant TRFNC        : std_logic_vector(5 downto 0) := "011001";
+  constant BZ0          : std_logic_vector(5 downto 0) := "011010";
+  constant BZ1          : std_logic_vector(5 downto 0) := "011011";
+  constant BC0          : std_logic_vector(5 downto 0) := "011100";
+  constant BC1          : std_logic_vector(5 downto 0) := "011101";
+  constant BV0          : std_logic_vector(5 downto 0) := "011110";
+  constant BV1          : std_logic_vector(5 downto 0) := "011111";       
+  constant BN0          : std_logic_vector(5 downto 0) := "100000";       
+  constant BN1          : std_logic_vector(5 downto 0) := "100001";       
+  constant BRA          : std_logic_vector(5 downto 0) := "100010";  
+  constant RTS          : std_logic_vector(5 downto 0) := "100011";
+  constant LOADindconst : std_logic_vector(5 downto 0) := "100100";
+  constant STOREsecaccu : std_logic_vector(5 downto 0) := "100101";
+  constant TFRaccu      : std_logic_vector(5 downto 0) := "100110";
+  constant TFRsecaccu   : std_logic_vector(5 downto 0) := "100111";
+  constant MULUconst    : std_logic_vector(5 downto 0) := "101000";
+  constant MULUaddr     : std_logic_vector(5 downto 0) := "101001";
+  constant INCsecaccu   : std_logic_vector(5 downto 0) := "101010";
+  constant DECsecaccu   : std_logic_vector(5 downto 0) := "101011";
   
-  constant NOP        : std_logic_vector(5 downto 0) := "111111";
+  constant NOP          : std_logic_vector(5 downto 0) := "111111";
 
   -- Selection des opérandes
   constant MUX_ACCU          : std_logic_vector(2 downto 0) := "000";
@@ -86,10 +90,10 @@ package nanoProcesseur_package is
   
   
   -- Index des indicateurs de controle
-  constant Zidx : integer := 3;
-  constant Cidx : integer := 2;
-  constant Vidx : integer := 1;
-  constant Nidx : integer := 0;
+  constant Zidx : integer   := 3;
+  constant Cidx : integer   := 2;
+  constant Vidx : integer   := 1;
+  constant Nidx : integer   := 0;
 
 
 end package nanoProcesseur_package ;

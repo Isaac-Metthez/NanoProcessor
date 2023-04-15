@@ -121,7 +121,7 @@ begin
     when MULUaddr  | MULUconst =>
         u16Alu <=  STD_LOGIC_VECTOR(UNSIGNED(operande1_i) * UNSIGNED(operande2_i));   
               
-    when TFR =>
+    when TFRsecaccu =>
         u16Alu(8 DOWNTO 0) <=  '0' & operande1_i;
         
     when others =>
