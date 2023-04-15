@@ -44,247 +44,291 @@ begin
 
 with pc_i select
   ir_o <= 
+--------------------------------------------------------------------------------
+--Init -------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+  -- set port a, b, c output to 0
+         LOADconst 	     & X"00"             when	X"00", 
+         STOREaddr       & PortA             when	X"01",   
+         STOREaddr       & PortB             when	X"02",  
+         STOREaddr       & PortC             when	X"03",  
+  -- init stack                                
+         LOADconst 	     & S                 when	X"04", 
+         STOREaddr 	     & S                 when	X"05",
+  -- branch to main
+         BRA 	         & MAIN              when	X"06", 
+--------------------------------------------------------------------------------  
 
 --------------------------------------------------------------------------------
 --MAIN--------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-
-         LOADconst 	& X"80"            when	X"00", 
-         TFRaccu 	& none            when	X"01", 
-         DECsecaccu & none             when	X"02", 
-         STOREsecaccu&X"02"            when	X"03", 
-         LOADaddr & X"81"             when	X"04", 
-         STOREaddr  & PortA            when	X"05",
-         
-         
-
---         DECaddr    & S                 when	MAIN,
---         STOREindconst&  
---         STOREaddr  & usiMulA           when	X"11", 
---         STOREaddr  & usiMemPorta       when	X"06",
-  
-  
-  
-  
-  
-  
---------------------------------------------------------------------------------
-  
-  
-  
------- test MULUconst 
-----         LOADconst 	& X"FF"            when	X"00", 
-----         MULUconst 	& X"FF"            when	X"01", 
-----         STOREaddr  & PortB            when	X"02", 
-----         TFR        & none             when	X"03", 
-----         STOREaddr  & PortA            when	X"04",
-  
------- test RTS and LOADindconst
-----         LOADconst 	& X"60"            when	X"00", 
-----         STOREaddr 	& usiMulA          when	X"01", -- one byte after usiMulA in mem
-----         LOADconst 	& usiMulB          when	X"02", 
-----         STOREaddr  & PortA            when	X"03", 
-----         LOADindconst& X"FF"           when X"04", -- FF = -1
-----         RTS        & none             when	X"05", 
-----         STOREaddr  & PortA            when	X"60",     
-
-         
-         
----- Prepare values that are multiplied 
-----         LOADconst  & X"FF"             when	X"04",  -- by const
-----         LOADconst  & std_logic_vector(to_unsigned(255,8))       when	X"04",  -- by uint const
---         LOADaddr   & PortA             when	X"04",  
---         STOREaddr  & usiMulA           when	X"05", 
---         STOREaddr  & usiMemPorta       when	X"06",
-          
-----         LOADconst  & X"FF"             when	X"06",  -- by hexa const
-----         LOADconst  & std_logic_vector(to_unsigned(255,8))       when	X"06",  -- by uint const
---         LOADaddr   & PortB             when	X"07",       
---         STOREaddr  & usiMulB           when	X"08", 
---         STOREaddr  & usiMemPortb       when	X"09",      
-         
---         LOADaddr   & PortC             when	X"07",       
---         STOREaddr  & usiMulB           when	X"08", 
---         STOREaddr  & usiMemPortb       when	X"09",      
-         
----- there's three possibilies of multiplication uncomment to branch
-
----- First method with polynomial
----- Which is quite fast and is almost a deterministic algorithm 
-----      BRA       	& X"10"            when	X"08",  -- Branch to the other multiplication method    
-
----- Second method with a loop 
----- Which is faster for small numbers but the duration increases proportionnaly to the size of the smallest number
----- This method takes a little bit less space in Rom
-----       BRA       	& X"44"            when	X"08",  -- Branch to the other multiplication method     
-         
-
----- Third method mixed  
----- depending on the size of the numbers chooses the faster method    
---         NEGconst   & X"10"            when	X"0A",  -- if number is strictly smaller than X"10" choose loop method 
---         ADDaddr    & usiMulA          when	X"0B",  
---         BC0       	& X"44"            when	X"0C",  -- Branch to loop multiplication    
---         NEGconst   & X"10"            when	X"0D",  -- if number is strictly smaller than X"10" choose loop method  
---         ADDaddr    & usiMulB          when	X"0E",  
---         BC0       	& X"44"            when	X"0F",  -- Branch to loop multiplication     
-
----- First method decomposes number A into a polynomial
----- takes the same time for all numbers
----- small example 
----- "1010" * "1001" 
----- is equal to => (1*8 + 0*4 + 1*2 + 0*1) * "1001"
----- is equal to => 8*"1001" + 2*"1001"
----- is equal to => "1001"<<3 + "1001"<<1
- 
--- -- Prepare var usicounter for loop                 
---         LOADconst 	& X"08"             when	X"10",  -- due to 8bit 
---         STOREaddr 	& usiCounter        when	X"11",           
-                                                 
--- -- Reset old result and temp values             
---         LOADconst 	& X"00"             when	X"12",  
---         STOREaddr  & usiLessResultMul  when	X"13",  
---         STOREaddr  & usiMostResultMul  when	X"14",    
---         STOREaddr  & usiTempMul        when	X"15",  
-                                                 
--- -- Take lsb and put it into carry                  
---         LOADaddr  	& usiMulB           when	X"16",   
---         RORaccu   	& None              when	X"17",    
---         STOREaddr  & usiMulB           when	X"18",  
-         
--- -- Jump if lsb is not 1        
---         BC0       	& X"20"             when	X"19",   
- 
--- --  Add part to less significant byte and keep carry  => to result 
---         LOADaddr  	& usiLessResultMul  when	X"1A", 
---         ADDAddr    & usiMulA           when	X"1B",   
---         STOREaddr  & usiLessResultMul  when	X"1C",   
---         LOADaddr  	& usiMostResultMul  when	X"1D", 
---         ADCAddr    & usiTempMul        when	X"1E",  
---         STOREaddr  & usiMostResultMul  when	X"1F",  
-
--- --  Temp values to the power of 2
---         CLRC       & None              when    X"20",  
---         LOADaddr  	& usiMulA           when	X"21",     
---         ROLaccu  	& None              when	X"22",    
---         STOREaddr 	& usiMulA           when	X"23",
---         LOADaddr  	& usiTempMul        when	X"24",      
---         ROLaccu  	& None              when	X"25",     
---         STOREaddr 	& usiTempMul        when	X"26",  
-         
--- -- Display all important value to debug
--- -- to not display
---       NOP        & None                when    X"27",
--- -- to display for debug     
-----         BRA        & X"30"             when	X"27",
-----         LOADaddr  	& usiTempMul        when	X"30",   
-----         STOREaddr 	& X"20"             when	X"31", 
-----         LOADaddr  	& usiMulA           when	X"32",   
-----         STOREaddr 	& X"20"             when	X"33", 
-----         LOADaddr  	& usiMostResultMul  when	X"34",   
-----         STOREaddr 	& X"20"             when	X"35", 
-----         LOADaddr  	& usiLessResultMul  when	X"36",   
-----         STOREaddr 	& X"20"             when	X"37", 
-----         LOADaddr  	& usiCounter        when	X"38",   
-----         STOREaddr 	& X"20"             when	X"39", 
-----         BRA     	& X"28"             when	X"3A",         
-         
-----  decrement counter
---         DECaddr    & usiCounter        when	X"28",    
---         STOREaddr  & usiCounter        when	X"29",  
-         
----- redo loop if counter isn't 0
---         BZ0        & X"16"             when	X"2A", 
-          
----- Display Multiplication result
---         BRA       	& X"60"             when	X"2B",
-         
-         
----- Second method  
----- Takes more time for big numbers
-
----- Reset Old result and temp values
---         LOADconst 	& X"00"             when	X"44",  
---         STOREaddr  & usiLessResultMul  when	X"45",  
---         STOREaddr  & usiMostResultMul  when	X"46",    
---         STOREaddr  & usiTempMul        when	X"47",    
+-- read inputs
+         DECaddr        & S                 when	MAIN,
+         STOREaddr      & S                 when	X"11",   
+         TFRaccu        & none              when    X"12",
+         LOADconst      & X"16"             when    X"13",
+         STOREsecaccu   & X"00"             when	X"14", 
+         BRA            & READINPUTS        when	X"15", 
         
----- Put the smallest var in usiCounter and the biggest in var temp       
---         NEGaddr    & usiMulB           when	X"48",
---         BZ1        & X"50"             when    X"49",
          
---         ADDaddr    & usiMulA           when    X"4A",
---         BC1        & X"50"             when	X"4B", 
+-- select which multiplication to do and execute it
+         DECaddr        & S                 when	X"16",
+         STOREaddr      & S                 when	X"17",   
+         TFRaccu        & none              when    X"18",
+         LOADconst      & X"1C"             when    X"19",
+         STOREsecaccu   & X"00"             when	X"1A", 
+         BRA            & MULSELECTOR       when	X"1B", 
+         
+         
+-- Display results
+         DECaddr        & S                 when	X"1C",
+         STOREaddr      & S                 when	X"1D",   
+         TFRaccu        & none              when    X"1E",
+         LOADconst      & X"22"             when    X"1F",
+         STOREsecaccu   & X"00"             when	X"20", 
+         BRA            & DISPLAY           when	X"21", 
+         
+-- Wait until there's a new value as input
+         DECaddr        & S                 when	X"22",
+         STOREaddr      & S                 when	X"23",   
+         TFRaccu        & none              when    X"24",
+         LOADconst      & X"28"             when    X"25",
+         STOREsecaccu   & X"00"             when	X"26", 
+         BRA            & WAITIN            when	X"27", 
+ 
+ -- Loop main
+         BRA            & MAIN              when	X"28", 
+         
+--------------------------------------------------------------------------------
+  
+--------------------------------------------------------------------------------
+--Software multiplication-------------------------------------------------------
+--------------------------------------------------------------------------------
+         
+-- there's three possibilies of multiplication uncomment to branch
+
+-- First method with polynomial
+-- Which is quite fast and is almost a deterministic algorithm 
+--      BRA       	 & X"40"            when	    SOFTWAREMUL,  -- Branch to the other multiplication method    
+
+-- Second method with a loop 
+-- Which is faster for small numbers but the duration increases proportionnaly to the size of the smallest number
+-- This method takes a little bit less space in Rom
+--       BRA       	    & X"64"            when	    SOFTWAREMUL,  -- Branch to the other multiplication method     
+         
+-- Third method mixed  
+-- depending on the size of the numbers chooses the fasted method    
+         NEGconst       & X"10"            when     SOFTWAREMUL,  -- if number is strictly smaller than X"10" choose loop method 
+         ADDaddr        & usiMulA          when     X"3B",  
+         BC0       	    & X"64"            when     X"3C",  -- Branch to loop multiplication    
+         NEGconst       & X"10"            when     X"3D",  -- if number is strictly smaller than X"10" choose loop method  
+         ADDaddr        & usiMulB          when     X"3E",  
+         BC0       	    & X"64"            when     X"3F",  -- Branch to loop multiplication     
+
+-- First method decomposes number A into a polynomial
+-- takes the same time for all numbers
+-- small example 
+-- "1010" * "1001" 
+-- is equal to => (1*8 + 0*4 + 1*2 + 0*1) * "1001"
+-- is equal to => 8*"1001" + 2*"1001"
+-- is equal to => "1001"<<3 + "1001"<<1
+ 
+ -- Prepare var usicounter for loop                 
+         LOADconst 	    & X"08"             when	X"40",  -- due to 8bits 
+         STOREaddr 	    & usiCounter        when	X"41",           
+                                                  
+ -- Reset old result and temp values              
+         LOADconst 	    & X"00"             when	X"42",  
+         STOREaddr      & usiLessResultMul  when	X"43",  
+         STOREaddr      & usiMostResultMul  when	X"44",    
+         STOREaddr      & usiTempMul        when	X"45",  
+                                                  
+ -- Take lsb and put it into carry                
+         LOADaddr  	    & usiMulB           when	X"46",   
+         RORaccu   	    & None              when	X"47",    
+         STOREaddr      & usiMulB           when	X"48",  
+                                                  
+ -- Jump if lsb is not 1                          
+         BC0       	    & X"50"             when	X"49",   
+ 
+ --  Add part to less significant byte and keep carry  => to result 
+         LOADaddr  	    & usiLessResultMul  when	X"4A", 
+         ADDAddr        & usiMulA           when	X"4B",   
+         STOREaddr      & usiLessResultMul  when	X"4C",   
+         LOADaddr  	    & usiMostResultMul  when	X"4D", 
+         ADCAddr        & usiTempMul        when	X"4E",  
+         STOREaddr      & usiMostResultMul  when	X"4F",  
+
+ --  Temp values to the power of 2
+         CLRC           & None              when    X"50",  
+         LOADaddr  	    & usiMulA           when	X"51",     
+         ROLaccu  	    & None              when	X"52",    
+         STOREaddr 	    & usiMulA           when	X"53",
+         LOADaddr  	    & usiTempMul        when	X"54",      
+         ROLaccu  	    & None              when	X"55",     
+         STOREaddr 	    & usiTempMul        when	X"56",   
+         
+--  decrement counter
+         DECaddr        & usiCounter        when	X"57",    
+         STOREaddr      & usiCounter        when	X"58",  
+         
+-- redo loop if counter isn't 0
+         BZ0            & X"46"             when	X"59", 
+
+         BRA       	    & X"80"             when	X"5A",
+         
+         
+-- Second method  
+-- Takes more time for big numbers
+
+-- Reset Old result and temp values
+         LOADconst 	    & X"00"             when	X"64",  
+         STOREaddr      & usiLessResultMul  when	X"65",  
+         STOREaddr      & usiMostResultMul  when	X"66",    
+         STOREaddr      & usiTempMul        when	X"67",    
+        
+-- Put the smallest var in usiCounter and the biggest in var temp       
+         NEGaddr        & usiMulB           when	X"68",
+         BZ1            & X"70"             when    X"69",
+         
+         ADDaddr        & usiMulA           when    X"6A",
+         BC1            & X"70"             when	X"6B", 
          
          
           
---         LOADaddr   & usiMulA           when    X"4C",
---         STOREaddr  & usiCounter        when    X"4D", 
---         LOADaddr   & usiMulB           when    X"4E",
---         BRA        & X"53"             when	X"4F", 
+         LOADaddr       & usiMulA           when    X"6C",
+         STOREaddr      & usiCounter        when    X"6D", 
+         LOADaddr       & usiMulB           when    X"6E",
+         BRA            & X"73"             when	X"6F", 
          
---         LOADaddr   & usiMulB           when    X"50",
---         STOREaddr  & usiCounter        when    X"51", 
---         LOADaddr   & usiMulA           when    X"52",
---         STOREaddr  & usiTempMul        when    X"53", 
+         LOADaddr       & usiMulB           when    X"70",
+         STOREaddr      & usiCounter        when    X"71", 
+         LOADaddr       & usiMulA           when    X"72",
+         STOREaddr      & usiTempMul        when    X"73", 
          
+         LOADaddr       & usiCounter        when	X"74",    
+ -- redo loop if counter isn't 
+         BZ1            & X"7F"             when	X"75",
          
---         LOADaddr    & usiCounter        when	X"54",    
--- -- redo loop if counter isn't 
---         BZ1        & X"5F"             when	X"55",
-         
----- Add var temp in result (usiCounter times)                  
---         LOADaddr   & usiLessResultMul  when    X"56",
---         ADDaddr    & usiTempMul        when    X"57", 
---         STOREaddr  & usiLessResultMul  when    X"58",
+-- Add var temp in result (usiCounter times)                  
+         LOADaddr       & usiLessResultMul  when    X"76",
+         ADDaddr        & usiTempMul        when    X"77", 
+         STOREaddr      & usiLessResultMul  when    X"78",
 
---         LOADaddr   & usiMostResultMul  when    X"59",
---         ADCconst   & None              when    X"5A", 
---         STOREaddr  & usiMostResultMul  when    X"5B",
+         LOADaddr       & usiMostResultMul  when    X"79",
+         ADCconst       & None              when    X"7A", 
+         STOREaddr      & usiMostResultMul  when    X"7B",
          
-----  decrement counter
---         DECaddr    & usiCounter        when	X"5C",    
---         STOREaddr  & usiCounter        when	X"5D",  
+--  decrement counter
+         DECaddr        & usiCounter        when	X"7C",    
+         STOREaddr      & usiCounter        when	X"7D",  
+         BRA       	    & X"75"             when	X"7E",
          
---         BRA       	& X"55"             when	X"5E",
+         BRA       	    & X"80"             when	X"7F",
+
          
----- Go to display
---         BRA       	& X"60"             when	X"5F",
-         
-         
--- -- Display Multiplication result
---         LOADaddr   & usiMostResultMul  when	X"60", 
---         STOREaddr  & PortA             when	X"61",  
---         LOADaddr   & usiLessResultMul  when	X"62", 
---         STOREaddr  & PortB             when	X"63",  
---         BRA       	& X"70"             when	X"64",
-   
--- -- Loop since port a and b are the same
- 
---         NEGaddr    & PortA             when	X"70", 
---         ADDaddr    & usiMemPortA       when	X"71", 
---         BZ0       	& X"00"             when	X"72",
-                                                  
---         NEGaddr    & PortB             when	X"73", 
---         ADDaddr    & usiMemPortB       when	X"74", 
---         BZ0       	& X"00"             when	X"75",            
---         BRA       	& X"70"             when	X"76",
-       
-       
+-- return;          
+         INCaddr        & S                 when	X"80",   
+         STOREaddr      & S                 when	X"81",  
+         LOADindconst   & X"FF"             when	X"82", -- load accu-1 
+         STOREaddr      & memRTS            when	X"83", 
+         RTS            & memRTS            when    X"84",         
+  -- branch to main
 --------------------------------------------------------------------------------
-----Prgram init-----------------------------------------------------------------
-----------------------------------------------------------------------------------
---  -- set port a, b, c output to 0
---         LOADconst 	& X"00"             when	X"00", 
---         STOREaddr  & PortA             when	X"01",   
---         STOREaddr  & PortB             when	X"02",  
---         STOREaddr  & PortC             when	X"03",  
---  -- init stack                                
---         LOADaddr 	& S                 when	X"04", 
---         STOREaddr 	& S                 when	X"05",
---  -- branch to main
---         BRA 	    & MAIN              when	X"06", 
-----------------------------------------------------------------------------------  
----- end         
-         BRA		& X"FF"             when 	others;  
+         
+--------------------------------------------------------------------------------
+--Read inputs-------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Prepare values that are multiplied 
+         LOADaddr       & PortA             when	READINPUTS,  
+         STOREaddr      & usiMulA           when	X"91", 
+         STOREaddr      & usiMemPorta       when	X"92",
+          
+         LOADaddr       & PortB             when	X"93",       
+         STOREaddr      & usiMulB           when	X"94", 
+         STOREaddr      & usiMemPortb       when	X"95",   
+
+-- return;         
+         INCaddr        & S                 when	X"96",   
+         STOREaddr      & S                 when	X"97",  
+         LOADindconst   & X"FF"             when	X"98", -- load accu-1 
+         STOREaddr      & memRTS            when	X"99", 
+         RTS            & memRTS            when    X"9A",            
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+--Multiplication selector-------------------------------------------------------
+--------------------------------------------------------------------------------
+  -- Get state of button 3 
+         LOADaddr 	     & PortC            when	MULSELECTOR, 
+         ANDconst        & MaskButton3      when  	X"A1",     
+         BZ1             & X"A9"            when    X"A2",
+ -- hardware multiplication        
+         LOADaddr        & usiMulA          when	X"A3",
+         MULUaddr        & usiMulB          when	X"A4",
+         STOREaddr       & usiLessResultMul when	X"A5",  
+         TFRsecaccu      & none             when	X"A6",
+         STOREaddr       & usiMostResultMul when	X"A7",
+         BRA 	         & X"AF"            when	X"A8", 
+ -- call software multiplication        
+         DECaddr        & S                 when	X"A9",
+         STOREaddr      & S                 when	X"AA",   
+         TFRaccu        & none              when    X"AB",
+         LOADconst      & X"AF"             when    X"AC",
+         STOREsecaccu   & none              when	X"AD", 
+         BRA            & SOFTWAREMUL       when	X"AE", 
+-- return;          
+         INCaddr        & S                 when	X"AF",   
+         STOREaddr      & S                 when	X"B0",  
+         LOADindconst   & X"FF"             when	X"B1", -- load accu-1 
+         STOREaddr      & memRTS            when	X"B2", 
+         RTS            & memRTS            when    X"B3",         
+  -- branch to main
+--------------------------------------------------------------------------------        
+   
+--------------------------------------------------------------------------------
+--Display results---------------------------------------------------------------
+--------------------------------------------------------------------------------
+ -- Display Multiplication result
+         LOADaddr       & usiMostResultMul  when	X"C0", 
+         STOREaddr      & PortA             when	X"C1",  
+         LOADaddr       & usiLessResultMul  when	X"C2", 
+         STOREaddr      & PortB             when	X"C3",  
+         NOP       	    & none              when	X"C4",
+-- return;          
+         INCaddr        & S                 when	X"C5",   
+         STOREaddr      & S                 when	X"C6",  
+         LOADindconst   & X"FF"             when	X"C7", -- load accu-1 
+         STOREaddr      & memRTS            when	X"C8", 
+         RTS            & memRTS            when    X"C9",         
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+--Wait new inputs---------------------------------------------------------------
+--------------------------------------------------------------------------------
+ -- Loop since port a and b are the same
+ 
+         NEGaddr        & PortA             when	X"D0", 
+         ADDaddr        & usiMemPortA       when	X"D1", 
+         BZ0            & X"D7"             when	X"D2",
+                                                      
+         NEGaddr        & PortB             when	X"D3", 
+         ADDaddr        & usiMemPortB       when	X"D4", 
+         BZ0            & X"D7"             when	X"D5",            
+         BRA            & X"D0"             when	X"D6",
+-- return;          
+         INCaddr        & S                 when	X"D7",   
+         STOREaddr      & S                 when	X"D8",  
+         LOADindconst   & X"FF"             when	X"D9", -- load accu-1 
+         STOREaddr      & memRTS            when	X"DA", 
+         RTS            & memRTS            when    X"DB",    
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+--Catch error-------------------------------------------------------------------
+--------------------------------------------------------------------------------
+         BRA		     & X"FF"             when 	others;  
+--------------------------------------------------------------------------------
 
 end architecture Behavioral ; -- of ROM

@@ -132,7 +132,7 @@ begin
 
 
     when MULUaddr  | MULUconst =>
-        u16Alu <=  STD_LOGIC_VECTOR(UNSIGNED(operande1_i) * UNSIGNED(operande2_i));   
+        u16Alu(15 downto 0) <=  STD_LOGIC_VECTOR(UNSIGNED(operande1_i) * UNSIGNED(operande2_i));   
       CCR_mask <= (others => '1');
               
     when TFRsecaccu =>

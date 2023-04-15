@@ -25,7 +25,8 @@ use ieee.std_logic_1164.all;
 package variables is
  
  -- Variables 
-  constant S                   : std_logic_vector(7 downto 0) := X"9F";
+  constant memRTS              : std_logic_vector(7 downto 0) := X"9F";
+  constant S                   : std_logic_vector(7 downto 0) := X"9E";
   constant usiMulA             : std_logic_vector(7 downto 0) := X"80";
   constant usiMulB             : std_logic_vector(7 downto 0) := X"81";
   constant usiTempMul          : std_logic_vector(7 downto 0) := X"82";
@@ -39,10 +40,19 @@ package variables is
   constant None                : std_logic_vector(7 downto 0) := X"00";
   constant PortA               : std_logic_vector(7 downto 0) := X"20";
   constant PortB               : std_logic_vector(7 downto 0) := X"21";
-  constant PortC               : std_logic_vector(7 downto 0) := X"21";
+  constant PortC               : std_logic_vector(7 downto 0) := X"22";
+  constant MaskButton0         : std_logic_vector(7 downto 0) := X"01";
+  constant MaskButton1         : std_logic_vector(7 downto 0) := X"02";
+  constant MaskButton2         : std_logic_vector(7 downto 0) := X"04";
+  constant MaskButton3         : std_logic_vector(7 downto 0) := X"08";
   
   -- Entry
   constant MAIN                : std_logic_vector(7 downto 0) := X"10";
+  constant MULSELECTOR         : std_logic_vector(7 downto 0) := X"A0";
+  constant READINPUTS          : std_logic_vector(7 downto 0) := X"90";
+  constant SOFTWAREMUL         : std_logic_vector(7 downto 0) := X"3A";
+  constant DISPLAY             : std_logic_vector(7 downto 0) := X"C0";
+  constant WAITIN              : std_logic_vector(7 downto 0) := X"D0";
   
 end package variables ;
 package body variables is

@@ -133,36 +133,43 @@ begin
   sim_cycle(2);
   -- Début des tests
    reset_i      <= '1';
+ 
+port_c_i <= "0101"; -- button 3 => 0 => MULU by software 
+for i in 0 to 255 loop
+   for j in 0 to 255 loop
+       port_a_i <= std_logic_vector(to_unsigned(j,8));
+       port_b_i <= std_logic_vector(to_unsigned(i,8));
+       while True loop
+            sim_cycle(1);
+            exit when PC_o = X"10"; -- wait start mult
+       end loop;
+       while True loop
+            sim_cycle(1);
+            exit when PC_o = X"D6"; -- wait end mult
+       end loop;
+       test_vecteur(port_a_o & port_b_o, std_logic_vector(to_unsigned(i*j,16)), 10);
+
+   end loop;
+end loop;
    
+ port_c_i <= "1000"; -- button 3 => 01=> MULU by hardware
    for i in 0 to 255 loop
        for j in 0 to 255 loop
            port_a_i <= std_logic_vector(to_unsigned(j,8));
            port_b_i <= std_logic_vector(to_unsigned(i,8));
-           port_c_i <= "0101"; -- button 3 => 0 => MULU by software
-           
-           while True loop
-                sim_cycle(1);
-                exit when PC_o = X"00"; -- wait start mult
-           end loop;
-           while True loop
-                sim_cycle(1);
-                exit when PC_o = X"76"; -- wait end mult
-           end loop;
-           test_vecteur(port_a_o & port_b_o, std_logic_vector(to_unsigned(i*j,16)), 10);
 
-
-           port_c_i <= "1000"; -- button 3 => 01=> MULU by hardware
            while True loop
                 sim_cycle(1);
-                exit when PC_o = X"00"; -- wait start mult
+                exit when PC_o = X"10"; -- wait start mult
            end loop;
            while True loop
                 sim_cycle(1);
-                exit when PC_o = X"76"; -- wait end mult
+                exit when PC_o = X"D6"; -- wait end mult
            end loop;
            test_vecteur(port_a_o & port_b_o, std_logic_vector(to_unsigned(i*j,16)), 20);
        end loop;
    end loop;
+   
    
   -- reset
    reset_i      <= '0';
