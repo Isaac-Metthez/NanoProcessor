@@ -161,7 +161,8 @@ begin
           when ROLaccu   | RORaccu |
                INCaccu   | 
                DECaccu   | 
-               NEGaccu     =>
+               NEGaccu   |
+               TFRaccu  =>
             oper_sel_o <= MUX_ACCU;
 
        	  when LOADconst |
@@ -184,7 +185,9 @@ begin
                ADDaddr | ADCaddr  | MULUaddr =>
             oper_sel_o <= MUX_ACCU_DATA;
               
-          when TFRsecaccu =>
+          when TFRsecaccu |
+            INCsecaccu |
+            DECsecaccu =>
             oper_sel_o <= MUX_SECACCU;    
 
           when others =>
@@ -208,7 +211,7 @@ begin
                XORconst | XORaddr   |
                RORaccu  | ROLaccu   |
                ADDconst | ADDaddr   | ADCaddr | ADCconst |
-               MULUconst|MULUaddr   |
+               MULUconst| MULUaddr  |
                INCaccu  | INCaddr   |
                DECaccu  | DECaddr   |
                NEGaccu  | NEGaddr   | NEGconst |
@@ -226,7 +229,9 @@ begin
 	
 	if state = sOPCODE_DECODE then
 	   case opcode_i is
-          when MULUconst | MULUaddr =>
+          when MULUconst | MULUaddr  |
+            INCsecaccu   | DECsecaccu|
+            TFRaccu =>
           	SecAccu_load_o <= '1'; 
             
           when others =>
@@ -245,16 +250,16 @@ begin
 		case opcode_i is
           when LOADaddr | LOADconst |
                LOADindconst |
-               ANDconst | ANDaddr   | 
-               ORconst  | ORaddr    |
-               XORconst | XORaddr   |
-               RORaccu  | ROLaccu   |
-               ADDconst | ADDaddr   | ADCaddr | ADCconst |
-               MULUconst| MULUaddr  |
-               INCaccu  | INCaddr   |
-               DECaccu  | DECaddr   |
-               NEGaccu  | NEGaddr   | NEGconst |
-               TFRsecaccu =>
+               ANDconst     | ANDaddr   | 
+               ORconst      | ORaddr    |
+               XORconst     | XORaddr   |
+               RORaccu      | ROLaccu   |
+               ADDconst     | ADDaddr   | ADCaddr | ADCconst |
+               MULUconst    | MULUaddr  |
+               INCaccu      | INCaddr   |
+               DECaccu      | DECaddr   |
+               NEGaccu      | NEGaddr   | NEGconst |
+               INCsecaccu   | DECsecaccu  =>
           	CCR_load_o <= '1';
           	
           when SETC | CLRC | TRFNC =>

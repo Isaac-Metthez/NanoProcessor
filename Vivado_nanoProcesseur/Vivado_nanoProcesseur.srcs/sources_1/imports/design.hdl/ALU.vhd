@@ -41,7 +41,7 @@ end entity ALU;
 
 architecture Behavioral of ALU is
 
-  signal u16Alu     : std_logic_vector(15 DOWNTO 0);
+  signal u16Alu     : std_logic_vector(16 DOWNTO 0);
   signal CCR_mask   : std_logic_vector(3 downto 0);
   signal flag_Z		: std_logic;
   signal flag_C		: std_logic;
@@ -112,17 +112,34 @@ begin
       CCR_mask(Zidx) <= '1';
       CCR_mask(Nidx) <= '1';      
 
+    when DECsecaccu  =>
+      u16Alu(16 DOWNTO 8) <= STD_LOGIC_VECTOR(UNSIGNED('0' & operande1_i) -1);
+      CCR_mask(Cidx) <= '1';
+      CCR_mask(Zidx) <= '1';
+      CCR_mask(Nidx) <= '1';        
+      
+    when INCsecaccu =>
+      u16Alu(16 DOWNTO 8) <= STD_LOGIC_VECTOR(UNSIGNED('0' & operande1_i) + 1);
+      CCR_mask(Cidx) <= '1';
+      CCR_mask(Zidx) <= '1';
+      CCR_mask(Nidx) <= '1';      
+
     when DECaccu  | DECaddr =>
       u16Alu(8 DOWNTO 0) <= STD_LOGIC_VECTOR(UNSIGNED('0' & operande1_i) -1);
       CCR_mask(Cidx) <= '1';
       CCR_mask(Zidx) <= '1';
       CCR_mask(Nidx) <= '1';        
 
+
     when MULUaddr  | MULUconst =>
         u16Alu <=  STD_LOGIC_VECTOR(UNSIGNED(operande1_i) * UNSIGNED(operande2_i));   
+      CCR_mask <= (others => '1');
               
     when TFRsecaccu =>
         u16Alu(8 DOWNTO 0) <=  '0' & operande1_i;
+        
+    when TFRaccu =>
+        u16Alu(15 DOWNTO 8) <=  operande1_i;
         
     when others =>
      null;         -- Les valeurs par défaut sont mises avant le case
@@ -132,16 +149,17 @@ end process;
 
 	  
 -- Branchement de la sortie
-ALU_o <=  u16Alu;
+ALU_o <=  u16Alu(15 DOWNTO 0);
 	  
 -- indicateur de contrôle
 flag_Z <= 	CCR_i(Zidx) when CCR_mask(Zidx) = '0' else
             '1'         when (opcode_i = MULUconst or opcode_i = MULUconst) and u16Alu = "0000000000000000" else
+            '1'         when (opcode_i = DECsecaccu or opcode_i = INCsecaccu) and u16Alu(15 DOWNTO 8) = "00000000" else
       		'1'         when u16Alu(7 DOWNTO 0) = "00000000" else
       		'0';
 
 flag_N <= 	CCR_i(Nidx) when CCR_mask(Nidx) = '0' else
-            u16Alu(15)  when opcode_i = MULUconst or opcode_i = MULUconst else
+            u16Alu(15)  when opcode_i = MULUconst or opcode_i = MULUconst or opcode_i = DECsecaccu or opcode_i = INCsecaccu else
             u16Alu(7);
 
 flag_V <= 	CCR_i(Vidx) when CCR_mask(Vidx) = '0' else
@@ -154,6 +172,7 @@ flag_C <= 	'0'         when opcode_i = CLRC      else
        		CCR_i(Nidx) when opcode_i = TRFNC     else
        		CCR_i(Cidx) when CCR_mask(Cidx) = '0' else
             '0'         when opcode_i = MULUconst or opcode_i = MULUconst else
+            u16Alu(16)  when opcode_i = DECsecaccu or opcode_i = INCsecaccu else
        		u16Alu(8);
 
 Z_C_V_N <= flag_Z & flag_C & flag_V & flag_N;

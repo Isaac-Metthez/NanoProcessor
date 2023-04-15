@@ -49,11 +49,14 @@ with pc_i select
 --MAIN--------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-         LOADconst 	& X"81"            when	X"00", 
-         MULUconst 	& X"FF"            when	X"01", 
-         STOREsecaccu&none            when	X"02", 
-         LOADaddr & X"80"             when	X"03", 
-         STOREaddr  & PortA            when	X"04",
+         LOADconst 	& X"80"            when	X"00", 
+         TFRaccu 	& none            when	X"01", 
+         DECsecaccu & none             when	X"02", 
+         STOREsecaccu&X"02"            when	X"03", 
+         LOADaddr & X"81"             when	X"04", 
+         STOREaddr  & PortA            when	X"05",
+         
+         
 
 --         DECaddr    & S                 when	MAIN,
 --         STOREindconst&  
