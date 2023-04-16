@@ -261,3 +261,4 @@ launch_simulation
 open_wave_config C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/testbench_behav.wcfg
 source testbench.tcl
 run 400 ms
+close_sim
