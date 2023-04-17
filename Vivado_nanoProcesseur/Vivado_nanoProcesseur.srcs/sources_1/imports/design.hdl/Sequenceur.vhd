@@ -97,7 +97,7 @@ oper_load_o <= '1' WHEN state = sIR_DECODE ELSE '0';
 
 data_wr_o <= '1' WHEN state = sOPCODE_DECODE AND opcode_i = STOREaddr  ELSE '1'
                  WHEN state = sOPCODE_DECODE AND opcode_i = STOREsecaccu ELSE '0'; 
-
+         
 -- PC_inc_o
 P2:process(state,opcode_i,CCR_i)
 begin
@@ -225,8 +225,11 @@ begin
 	else
 	   Accu_load_o <= '0';
 	end if;
-	
-	
+end process;
+
+-- SecAccu_load_o
+P5:process(state,opcode_i)
+begin
 	if state = sOPCODE_DECODE then
 	   case opcode_i is
           when MULUconst | MULUaddr  |
@@ -244,7 +247,7 @@ begin
 end process;
 
 --CCR_load_o
-P5:process(state,opcode_i)
+P6:process(state,opcode_i)
 begin
 	if state = sOPCODE_DECODE then
 		case opcode_i is
