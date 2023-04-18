@@ -47,6 +47,7 @@ package variables is
   constant MaskButton3         : std_logic_vector(7 downto 0) := X"08";
   
   -- Entry
+  constant INIT                : std_logic_vector(7 downto 0) := X"00";
   constant MAIN                : std_logic_vector(7 downto 0) := X"10";
   constant MULSELECTOR         : std_logic_vector(7 downto 0) := X"A0";
   constant READINPUTS          : std_logic_vector(7 downto 0) := X"90";

@@ -48,7 +48,7 @@ with pc_i select
 --Init -------------------------------------------------------------------------
 --------------------------------------------------------------------------------
   -- set port a, b, c output to 0
-         LOADconst 	     & X"00"             when	X"00", 
+         LOADconst 	     & X"00"             when	INIT, 
          STOREaddr       & PortA             when	X"01",   
          STOREaddr       & PortB             when	X"02",  
          STOREaddr       & PortC             when	X"03",  

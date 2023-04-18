@@ -136,7 +136,7 @@ begin
       CCR_mask <= (others => '1');
               
     when TFRsecaccu =>
-        u16Alu(8 DOWNTO 0) <=  '0' & operande1_i;
+        u16Alu(7 DOWNTO 0) <=  operande1_i;
         
     when TFRaccu =>
         u16Alu(15 DOWNTO 8) <=  operande1_i;
