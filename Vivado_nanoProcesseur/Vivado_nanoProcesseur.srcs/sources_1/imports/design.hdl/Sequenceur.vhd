@@ -26,18 +26,20 @@ use ieee.std_logic_1164.all;
 
 entity Sequenceur is
   port (
-    clk_i       : in     std_logic;
-    reset_i     : in     std_logic;
-    PC_inc_o    : out    std_logic;
-    PC_load_o   : out    std_logic;
-    IR_load_o   : out    std_logic;
-    opcode_i    : in     std_logic_vector(5 downto 0);
-    CCR_i       : in     std_logic_vector(3 downto 0);
-    oper_sel_o  : out    std_logic_vector(2 downto 0);
-    oper_load_o : out    std_logic;
-    Accu_load_o : out    std_logic;
-    CCR_load_o  : out    std_logic;
-    data_wr_o   : out    std_logic);
+    clk_i           : in     std_logic;
+    reset_i         : in     std_logic;
+    PC_inc_o        : out    std_logic;
+    PC_load_o       : out    std_logic;
+    PC_source_o     : out    std_logic;
+    IR_load_o       : out    std_logic;
+    opcode_i        : in     std_logic_vector(5 downto 0);
+    CCR_i           : in     std_logic_vector(3 downto 0);
+    oper_sel_o      : out    std_logic_vector(2 downto 0);
+    oper_load_o     : out    std_logic;
+    Accu_load_o     : out    std_logic;
+    SecAccu_load_o  : out    std_logic;
+    CCR_load_o      : out    std_logic;
+    data_wr_o       : out    std_logic);
 end entity Sequenceur;
 
 --------------------------------------------------------------------------------
@@ -87,13 +89,15 @@ end process;
 --ASSIGNATION COMBINATOIRE DES SORTIE EN FONCTION DE L'ETAT (STATE) et pour certaines sorties des entrées
 
 PC_load_o <= '1' WHEN state = sOPCODE_DECODE ELSE '0';
+PC_source_o <= '1' WHEN opcode_i = RTS ELSE '0' ;
 
 IR_load_o <= '1' WHEN state = sIR_LOAD ELSE '0';
 
 oper_load_o <= '1' WHEN state = sIR_DECODE ELSE '0';
 
-data_wr_o <= '1' WHEN state = sOPCODE_DECODE AND opcode_i = STOREaddr ELSE '0'; 
-
+data_wr_o <= '1' WHEN state = sOPCODE_DECODE AND opcode_i = STOREaddr  ELSE '1'
+                 WHEN state = sOPCODE_DECODE AND opcode_i = STOREsecaccu ELSE '0'; 
+         
 -- PC_inc_o
 P2:process(state,opcode_i,CCR_i)
 begin
@@ -103,6 +107,8 @@ begin
 		
         case opcode_i is          
           when BRA =>
+            PC_inc_o <= '0';
+          when RTS =>
             PC_inc_o <= '0';
           when BZ0 =>
             if CCR_i(Zidx) = '0' then
@@ -155,7 +161,8 @@ begin
           when ROLaccu   | RORaccu |
                INCaccu   | 
                DECaccu   | 
-               NEGaccu     =>
+               NEGaccu   |
+               TFRaccu  =>
             oper_sel_o <= MUX_ACCU;
 
        	  when LOADconst |
@@ -163,6 +170,7 @@ begin
             oper_sel_o <= MUX_CONST;
 
           when LOADaddr |
+               LOADindconst |
                INCaddr  |
                DECaddr  |
                NEGaddr    =>
@@ -170,13 +178,18 @@ begin
             
           -- 2 opérandes
        	  when ANDconst | ORconst   | XORconst |
-               ADDconst | ADCconst  =>
+               ADDconst | ADCconst  | MULUconst =>
             oper_sel_o <= MUX_ACCU_CONST;
 
        	  when ANDaddr | ORaddr   | XORaddr |
-               ADDaddr | ADCaddr  =>
+               ADDaddr | ADCaddr  | MULUaddr =>
             oper_sel_o <= MUX_ACCU_DATA;
               
+          when TFRsecaccu |
+            INCsecaccu |
+            DECsecaccu =>
+            oper_sel_o <= MUX_SECACCU;    
+
           when others =>
             oper_sel_o <= (others => '0');  
         end case;
@@ -192,14 +205,17 @@ begin
 	if state = sOPCODE_DECODE then
 		case opcode_i is
           when LOADaddr | LOADconst |
+               LOADindconst |
                ANDconst | ANDaddr   | 
                ORconst  | ORaddr    |
                XORconst | XORaddr   |
                RORaccu  | ROLaccu   |
                ADDconst | ADDaddr   | ADCaddr | ADCconst |
+               MULUconst| MULUaddr  |
                INCaccu  | INCaddr   |
                DECaccu  | DECaddr   |
-               NEGaccu  | NEGaddr   | NEGconst =>
+               NEGaccu  | NEGaddr   | NEGconst |
+               TFRsecaccu      =>
           	Accu_load_o <= '1'; 
             
           when others =>
@@ -211,20 +227,42 @@ begin
 	end if;
 end process;
 
---CCR_load_o
+-- SecAccu_load_o
 P5:process(state,opcode_i)
+begin
+	if state = sOPCODE_DECODE then
+	   case opcode_i is
+          when MULUconst | MULUaddr  |
+            INCsecaccu   | DECsecaccu|
+            TFRaccu =>
+          	SecAccu_load_o <= '1'; 
+            
+          when others =>
+          	SecAccu_load_o <= '0'; 
+          	
+          end case;
+	else
+	   SecAccu_load_o <= '0';
+	end if;
+end process;
+
+--CCR_load_o
+P6:process(state,opcode_i)
 begin
 	if state = sOPCODE_DECODE then
 		case opcode_i is
           when LOADaddr | LOADconst |
-               ANDconst | ANDaddr   | 
-               ORconst  | ORaddr    |
-               XORconst | XORaddr   |
-               RORaccu  | ROLaccu   |
-               ADDconst | ADDaddr   | ADCaddr | ADCconst |
-               INCaccu  | INCaddr   |
-               DECaccu  | DECaddr   |
-               NEGaccu  | NEGaddr   | NEGconst =>
+               LOADindconst |
+               ANDconst     | ANDaddr   | 
+               ORconst      | ORaddr    |
+               XORconst     | XORaddr   |
+               RORaccu      | ROLaccu   |
+               ADDconst     | ADDaddr   | ADCaddr | ADCconst |
+               MULUconst    | MULUaddr  |
+               INCaccu      | INCaddr   |
+               DECaccu      | DECaddr   |
+               NEGaccu      | NEGaddr   | NEGconst |
+               INCsecaccu   | DECsecaccu  =>
           	CCR_load_o <= '1';
           	
           when SETC | CLRC | TRFNC =>
@@ -237,6 +275,7 @@ begin
 	else
 	   CCR_load_o <= '0';
 	end if;
+
 end process;
 	         
 

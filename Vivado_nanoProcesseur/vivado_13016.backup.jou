@@ -1,0 +1,52 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Fri Apr 14 18:35:16 2023
+# Process ID: 13016
+# Current directory: C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent16736 C:\Users\Isaac\OneDrive\Bureau\Project\NanoProcessor\Vivado_nanoProcesseur\Vivado_nanoProcesseur.xpr
+# Log file: C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/vivado.log
+# Journal file: C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/Vivado_nanoProcesseur.xpr
+update_compile_order -fileset sources_1
+update_compile_order -fileset sim_1
+update_compile_order -fileset sim_1
+rive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/testbench_behav.wcfg
+source testbench.tcl
+update_compile_order -fileset sim_1
+update_compile_order -fileset sim_1
+close_sim
+launch_simulation
+open_wave_config C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/testbench_behav.wcfg
+source testbench.tcl
+run 40 us
+run 40 us
+close_sim
+launch_simulation
+open_wave_config C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/testbench_behav.wcfg
+source testbench.tcl
+run 40 us
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+close_sim
+launch_simulation
+open_wave_config C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/Users/Isaac/OneDrive/Bureau/Project/NanoProcessor/Vivado_nanoProcesseur/testbench_behav.wcfg
+source testbench.tcl
+run 40 us
+run 40 us
+run 40 ms
+run 40 ms
+close_sim
+launch_simulation

@@ -43,107 +43,117 @@ end entity nanoProcesseur;
 
 architecture Structural of nanoProcesseur is
 
-  signal CCR_load_o  : std_logic;
-  signal oper_sel_o  : std_logic_vector(2 downto 0);
-  signal ALU_o       : std_logic_vector(7 downto 0);
-  signal PC_load_o   : std_logic;
-  signal PC_inc_o    : std_logic;
-  signal IR_load_o   : std_logic;
-  signal opcode_o    : std_logic_vector(5 downto 0);
-  signal CCR_o       : std_logic_vector(3 downto 0);
-  signal Accu_load_o : std_logic;
-  signal data_o_net  : std_logic_vector(7  downto 0);
-  signal addr_o_net  : std_logic_vector(7  downto 0);
-  signal Z_C_V_N     : std_logic_vector(3 downto 0);
-  signal oper2_o     : std_logic_vector(7 downto 0);
-  signal oper1_o     : std_logic_vector(7 downto 0);
-  signal operande1_o : std_logic_vector(7 downto 0);
-  signal operande2_o : std_logic_vector(7 downto 0);
-  signal oper_load_o : std_logic;
+  signal CCR_load_o     : std_logic;
+  signal oper_sel_o     : std_logic_vector(2 downto 0);
+  signal ALU_o          : std_logic_vector(15 downto 0);
+  signal PC_load_o      : std_logic;
+  signal PC_source_o    : std_logic;
+  signal PC_inc_o       : std_logic;
+  signal IR_load_o      : std_logic;
+  signal opcode_o       : std_logic_vector(5 downto 0);
+  signal CCR_o          : std_logic_vector(3 downto 0);
+  signal Accu_load_o    : std_logic;
+  signal SecAccu_load_o : std_logic;
+  signal data_o_net     : std_logic_vector(7  downto 0);
+  signal Secdata_o_net  : std_logic_vector(7  downto 0);
+  signal addr_o_net     : std_logic_vector(7  downto 0);
+  signal Z_C_V_N        : std_logic_vector(3 downto 0);
+  signal oper2_o        : std_logic_vector(7 downto 0);
+  signal oper1_o        : std_logic_vector(7 downto 0);
+  signal operande1_o    : std_logic_vector(7 downto 0);
+  signal operande2_o    : std_logic_vector(7 downto 0);
+  signal oper_load_o    : std_logic;
 
   component Sequenceur
     port (
-      clk_i       : in     std_logic;
-      reset_i     : in     std_logic;
-      PC_inc_o    : out    std_logic;
-      PC_load_o   : out    std_logic;
-      IR_load_o   : out    std_logic;
-      opcode_i    : in     std_logic_vector(5 downto 0);
-      CCR_i       : in     std_logic_vector(3 downto 0);
-      oper_sel_o  : out    std_logic_vector(2 downto 0);
-      oper_load_o : out    std_logic;
-      Accu_load_o : out    std_logic;
-      CCR_load_o  : out    std_logic;
-      data_wr_o   : out    std_logic);
+    clk_i           : in     std_logic;
+    reset_i         : in     std_logic;
+    PC_inc_o        : out    std_logic;
+    PC_load_o       : out    std_logic;
+    PC_source_o     : out    std_logic;
+    IR_load_o       : out    std_logic;
+    opcode_i        : in     std_logic_vector(5 downto 0);
+    CCR_i           : in     std_logic_vector(3 downto 0);
+    oper_sel_o      : out    std_logic_vector(2 downto 0);
+    oper_load_o     : out    std_logic;
+    Accu_load_o     : out    std_logic;
+    SecAccu_load_o  : out    std_logic;
+    CCR_load_o      : out    std_logic;
+    data_wr_o       : out    std_logic);
   end component Sequenceur;
 
   component Program_Counter
     port (
-      clk_i     : in     std_logic;
-      reset_i   : in     std_logic;
-      PC_load_i : in     std_logic;
-      PC_o      : out    std_logic_vector(7 downto 0);
-      PC_inc_i  : in     std_logic;
-      addr_i    : in     std_logic_vector(7 downto 0));
+    clk_i       : in     std_logic;
+    reset_i     : in     std_logic;
+    PC_load_i   : in     std_logic;
+    PC_source_i : in     std_logic;
+    PC_o        : out    std_logic_vector(7 downto 0);
+    PC_inc_i    : in     std_logic;
+    addr_i      : in     std_logic_vector(7 downto 0);
+    accu_i      : in     std_logic_vector(7 downto 0));
   end component Program_Counter;
 
   component Instruction_Register
     port (
-      clk_i      : in     std_logic;
-      reset_i    : in     std_logic;
-      IR_load_i  : in     std_logic;
-      IR_i       : in     std_logic_vector(13 downto 0);
-      operande_o : out    std_logic_vector(7 downto 0);
-      opcode_o   : out    std_logic_vector(5 downto 0));
+    clk_i      : in     std_logic;
+    reset_i    : in     std_logic;
+    IR_load_i  : in     std_logic;
+    IR_i       : in     std_logic_vector(13 downto 0);
+    operande_o : out    std_logic_vector(7 downto 0);
+    accu_i     : in     std_logic_vector(7 downto 0);
+    secaccu_i  : in     std_logic_vector(7 downto 0);
+    opcode_o   : out    std_logic_vector(5 downto 0));
   end component Instruction_Register;
 
   component Operandes_Multiplexer
     port (
-      sel_i   : in     std_logic_vector(2 downto 0);
-      Accu_i  : in     std_logic_vector(7 downto 0);
-      const_i : in     std_logic_vector(7 downto 0);
-      data_i  : in     std_logic_vector(7 downto 0);
-      oper1_o : out    std_logic_vector(7 downto 0);
-      oper2_o : out    std_logic_vector(7 downto 0));
+    sel_i       : in     std_logic_vector(2 downto 0);
+    Accu_i      : in     std_logic_vector(7 downto 0);
+    SecAccu_i   : in     std_logic_vector(7 downto 0);
+    const_i     : in     std_logic_vector(7 downto 0);
+    data_i      : in     std_logic_vector(7 downto 0);
+    oper1_o     : out    std_logic_vector(7 downto 0);
+    oper2_o     : out    std_logic_vector(7 downto 0));
   end component Operandes_Multiplexer;
 
   component ALU
     port (
-      opcode_i    : in     std_logic_vector(5 downto 0);
-      operande1_i : in     std_logic_vector(7 downto 0);
-      operande2_i : in     std_logic_vector(7 downto 0);
-      CCR_i       : in     std_logic_vector(3 downto 0);
-      ALU_o       : out    std_logic_vector(7 downto 0);
-      Z_C_V_N     : out    std_logic_vector(3 downto 0));
+    opcode_i    : in     std_logic_vector(5 downto 0);
+    operande1_i : in     std_logic_vector(7 downto 0);
+    operande2_i : in     std_logic_vector(7 downto 0);
+    CCR_i       : in     std_logic_vector(3 downto 0);
+    ALU_o       : out    std_logic_vector(15 downto 0);
+    Z_C_V_N     : out    std_logic_vector(3 downto 0));
   end component ALU;
 
   component Status_Register
     port (
-      clk_i      : in     std_logic;
-      reset_i    : in     std_logic;
-      CCR_load_i : in     std_logic;
-      CCR_i      : in     std_logic_vector(3 downto 0);
-      CCR_o      : out    std_logic_vector(3 downto 0));
+    clk_i      : in     std_logic;
+    reset_i    : in     std_logic;
+    CCR_load_i : in     std_logic;
+    CCR_i      : in     std_logic_vector(3 downto 0);
+    CCR_o      : out    std_logic_vector(3 downto 0));
   end component Status_Register;
 
   component W_Register
     port (
-      Accu_in     : in     std_logic_vector(7 downto 0);
-      Accu_load_i : in     std_logic;
-      Accu_o      : out    std_logic_vector(7 downto 0);
-      clk_i       : in     std_logic;
-      reset_i     : in     std_logic);
+    Accu_in     : in     std_logic_vector(7 downto 0);
+    Accu_load_i : in     std_logic;
+    Accu_o      : out    std_logic_vector(7 downto 0);
+    clk_i       : in     std_logic;
+    reset_i     : in     std_logic);
   end component W_Register;
 
   component Operandes_Register
     port (
-      clk_i       : in     std_logic;
-      oper1_i     : in     std_logic_vector(7 downto 0);
-      oper2_i     : in     std_logic_vector(7 downto 0);
-      oper_load_i : in     std_logic;
-      operande1_o : out    std_logic_vector(7 downto 0);
-      operande2_o : out    std_logic_vector(7 downto 0);
-      reset_i     : in     std_logic);
+    clk_i       : in     std_logic;
+    oper1_i     : in     std_logic_vector(7 downto 0);
+    oper2_i     : in     std_logic_vector(7 downto 0);
+    oper_load_i : in     std_logic;
+    operande1_o : out    std_logic_vector(7 downto 0);
+    operande2_o : out    std_logic_vector(7 downto 0);
+    reset_i     : in     std_logic);
   end component Operandes_Register;
 
 begin
@@ -152,28 +162,32 @@ begin
 
   Seq_inst: Sequenceur
     port map(
-      clk_i       => clk_i,
-      reset_i     => reset_i,
-      PC_inc_o    => PC_inc_o,
-      PC_load_o   => PC_load_o,
-      IR_load_o   => IR_load_o,
-      opcode_i    => opcode_o,
-      CCR_i       => CCR_o,
-      oper_sel_o  => oper_sel_o,
-      oper_load_o => oper_load_o,
-      Accu_load_o => Accu_load_o,
-      CCR_load_o  => CCR_load_o,
-      data_wr_o   => data_wr_o);
+      clk_i         => clk_i,
+      reset_i       => reset_i,
+      PC_inc_o      => PC_inc_o,
+      PC_load_o     => PC_load_o,
+      PC_source_o   => PC_source_o,
+      IR_load_o     => IR_load_o,
+      opcode_i      => opcode_o,
+      CCR_i         => CCR_o,
+      oper_sel_o    => oper_sel_o,
+      oper_load_o   => oper_load_o,
+      Accu_load_o   => Accu_load_o,
+      SecAccu_load_o => SecAccu_load_o,
+      CCR_load_o    => CCR_load_o,
+      data_wr_o     => data_wr_o);
 
   PC_inst: Program_Counter
     port map(
       clk_i     => clk_i,
       reset_i   => reset_i,
       PC_load_i => PC_load_o,
+      PC_source_i  => PC_source_o,
       PC_o      => PC_o,
       PC_inc_i  => PC_inc_o,
-      addr_i    => addr_o_net);
-
+      addr_i    => addr_o_net,
+      accu_i    => data_o_net);
+      
   IR_inst: Instruction_Register
     port map(
       clk_i      => clk_i,
@@ -181,12 +195,15 @@ begin
       IR_load_i  => IR_load_o,
       IR_i       => IR_i,
       operande_o => addr_o_net,
+      accu_i     => data_o_net,
+      secaccu_i  => Secdata_o_net,
       opcode_o   => opcode_o);
 
   OM_inst: Operandes_Multiplexer
     port map(
       sel_i   => oper_sel_o,
       Accu_i  => data_o_net,
+      SecAccu_i  => Secdata_o_net,
       const_i => addr_o_net,
       data_i  => data_i,
       oper1_o => oper1_o,
@@ -211,12 +228,21 @@ begin
 
   WR_inst: W_Register
     port map(
-      Accu_in     => ALU_o,
+      Accu_in     => ALU_o(7 DOWNTO 0),
       Accu_load_i => Accu_load_o,
       Accu_o      => data_o_net,
       clk_i       => clk_i,
       reset_i     => reset_i);
 
+
+  SecWR_inst: W_Register
+    port map(
+      Accu_in     => ALU_o(15 DOWNTO 8),
+      Accu_load_i => SecAccu_load_o,
+      Accu_o      => Secdata_o_net,
+      clk_i       => clk_i,
+      reset_i     => reset_i);
+      
   OR_inst: Operandes_Register
     port map(
       clk_i       => clk_i,

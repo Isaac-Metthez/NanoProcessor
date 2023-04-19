@@ -26,12 +26,13 @@ use ieee.std_logic_1164.all;
 
 entity Operandes_Multiplexer is
   port (
-    sel_i   : in     std_logic_vector(2 downto 0);
-    Accu_i  : in     std_logic_vector(7 downto 0);
-    const_i : in     std_logic_vector(7 downto 0);
-    data_i  : in     std_logic_vector(7 downto 0);
-    oper1_o : out    std_logic_vector(7 downto 0);
-    oper2_o : out    std_logic_vector(7 downto 0));
+    sel_i       : in     std_logic_vector(2 downto 0);
+    Accu_i      : in     std_logic_vector(7 downto 0);
+    SecAccu_i   : in     std_logic_vector(7 downto 0);
+    const_i     : in     std_logic_vector(7 downto 0);
+    data_i      : in     std_logic_vector(7 downto 0);
+    oper1_o     : out    std_logic_vector(7 downto 0);
+    oper2_o     : out    std_logic_vector(7 downto 0));
 end entity Operandes_Multiplexer;
 
 --------------------------------------------------------------------------------
@@ -48,11 +49,13 @@ with sel_i select
   oper1_o <= Accu_i  when MUX_ACCU,
              const_i when MUX_CONST,
              data_i  when MUX_DATA,
+             SecAccu_i when MUX_SECACCU,
              Accu_i  when others;
                
 with sel_i select
   oper2_o <= const_i when MUX_ACCU_CONST,
              data_i  when MUX_ACCU_DATA,
+             SecAccu_i when MUX_SECACCU,
              Accu_i  when others;
              
 	  

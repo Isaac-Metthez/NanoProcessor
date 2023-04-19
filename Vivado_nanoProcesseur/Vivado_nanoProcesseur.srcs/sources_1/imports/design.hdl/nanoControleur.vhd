@@ -32,6 +32,8 @@ entity nanoControleur is
     port_a_o : out    std_logic_vector(7 downto 0);
     port_b_i : in     std_logic_vector(7 downto 0);
     port_b_o : out    std_logic_vector(7 downto 0);
+    port_c_4i : in     std_logic_vector(3 downto 0);
+    port_c_o : out    std_logic_vector(7 downto 0);
     
     -- Only used for TestBench
     PCounter_o: out    std_logic_vector(7 downto 0));
@@ -53,6 +55,8 @@ architecture Structural of nanoControleur is
   signal addr_o                      : std_logic_vector(7  downto 0);
   signal cs_port_a_i                 : std_logic;
   signal cs_port_b_i                 : std_logic;
+  signal cs_port_c_i                 : std_logic;
+  signal port_c_8i                   : std_logic_vector(7  downto 0);
   signal cs_ram_i                    : std_logic;
 
   component nanoProcesseur
@@ -75,13 +79,15 @@ architecture Structural of nanoControleur is
 
   component Data_Multiplexer
     port (
-      RAM_data_i    : in     std_logic_vector(7 downto 0);
-      port_a_data_i : in     std_logic_vector(7 downto 0);
-      port_b_data_i : in     std_logic_vector(7 downto 0);
-      data_o        : out    std_logic_vector(7 downto 0);
-      cs_ram_i      : in     std_logic;
-      cs_port_a_i   : in     std_logic;
-      cs_port_b_i   : in     std_logic);
+    RAM_data_i    : in     std_logic_vector(7 downto 0);
+    port_a_data_i : in     std_logic_vector(7 downto 0);
+    port_b_data_i : in     std_logic_vector(7 downto 0);
+    port_c_data_i : in     std_logic_vector(7 downto 0);
+    data_o        : out    std_logic_vector(7 downto 0);
+    cs_ram_i      : in     std_logic;
+    cs_port_a_i   : in     std_logic;
+    cs_port_b_i   : in     std_logic;
+    cs_port_c_i   : in     std_logic);
   end component Data_Multiplexer;
 
   component RAM
@@ -109,13 +115,14 @@ architecture Structural of nanoControleur is
       addr_i      : in     std_logic_vector(7 downto 0);
       cs_port_a_o : out    std_logic;
       cs_port_b_o : out    std_logic;
+      cs_port_c_o : out    std_logic;
       cs_ram_o    : out    std_logic);
   end component Address_Decode;
 
 begin
 
-
   PCounter_o <= PC_o;
+  port_c_8i  <= "0000" &  port_c_4i;
 
   nPr_inst: nanoProcesseur
     port map(
@@ -138,10 +145,12 @@ begin
       RAM_data_i    => data_o,
       port_a_data_i => port_a_i,
       port_b_data_i => port_b_i,
+      port_c_data_i => port_c_8i,
       data_o        => RAM_PORT_select_inst_data_o,
       cs_ram_i      => cs_ram_i,
       cs_port_a_i   => cs_port_a_i,
-      cs_port_b_i   => cs_port_b_i);
+      cs_port_b_i   => cs_port_b_i,
+      cs_port_c_i   => cs_port_c_i);
 
   RAM_inst: RAM
     port map(
@@ -170,11 +179,21 @@ begin
       data_i  => nanoProcesseur_inst_data_o,
       data_o  => port_b_o);
 
+  Port_c_Out_inst: Output_Register
+    port map(
+      clk_i   => clk_i,
+      reset_i => reset_i,
+      cs_i    => cs_port_c_i,
+      load_i  => wr_np,
+      data_i  => nanoProcesseur_inst_data_o,
+      data_o  => port_c_o);
+      
   Add_Dec_inst: Address_Decode
     port map(
       addr_i      => addr_o,
       cs_port_a_o => cs_port_a_i,
       cs_port_b_o => cs_port_b_i,
+      cs_port_c_o => cs_port_c_i,
       cs_ram_o    => cs_ram_i);
 
 

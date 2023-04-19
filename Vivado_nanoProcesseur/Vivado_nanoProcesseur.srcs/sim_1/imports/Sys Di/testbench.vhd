@@ -21,6 +21,8 @@ component nanoControleur is
     port_a_o : out    std_logic_vector(7 downto 0);
     port_b_i : in     std_logic_vector(7 downto 0);
     port_b_o : out    std_logic_vector(7 downto 0);
+    port_c_4i : in     std_logic_vector(3 downto 0);
+    port_c_o : out    std_logic_vector(7 downto 0);
     
     PCounter_o: out    std_logic_vector(7 downto 0));
 end component nanoControleur;
@@ -35,6 +37,8 @@ signal port_a_i : std_logic_vector(7 downto 0);
 signal port_a_o : std_logic_vector(7 downto 0);
 signal port_b_i : std_logic_vector(7 downto 0);
 signal port_b_o : std_logic_vector(7 downto 0);
+signal port_c_i : std_logic_vector(3 downto 0);
+signal port_c_o : std_logic_vector(7 downto 0);
 
 signal PC_o     : std_logic_vector(7 downto 0);
 
@@ -46,6 +50,7 @@ signal mark_error_vecteur   : std_logic := '0';
 signal error_number_vecteur : integer   := 0;
 signal clk_gen              : std_logic := '0';
 signal sim_finie            : std_logic := '0';
+
 
 begin
 
@@ -59,6 +64,8 @@ uut: nanoControleur
     port_a_o    => port_a_o, 
     port_b_i    => port_b_i , 
     port_b_o    => port_b_o,
+    port_c_4i    => port_c_i , 
+    port_c_o    => port_c_o,
     
     PCounter_o => PC_o
     );
@@ -126,221 +133,44 @@ begin
   sim_cycle(2);
   -- Début des tests
    reset_i      <= '1';
-   
-   -- X"FF"*X"FF" = X"FE01"
-   port_a_i <= X"FF";
-   port_b_i <= X"FF";
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"FE", 10);
-  test_vecteur(port_b_o, X"01", 11);
-  
-  -- Test don't multiply if input hasn't changed
-  sim_cycle(200);
-  
-   -- X"10"*X"05" = X"0050"
-   port_a_i <= X"10";
-   port_b_i <= X"05";
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
-      
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"00", 20);
-  test_vecteur(port_b_o, X"50", 21);
-  
-   -- X"A0"*X"0A" = X"0640"
-   port_a_i <= X"0A";
-   port_b_i <= X"A0";
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
-      
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"06", 30);
-  test_vecteur(port_b_o, X"40", 31);
-  
-   -- X"0A"*X"A0" = X"0640"
-  port_a_i <= X"A0";
-  port_b_i <= X"0A";
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"06", 30);
-  test_vecteur(port_b_o, X"40", 31);
-  
+ 
+port_c_i <= "0101"; -- button 3 => 0 => MULU by software 
+for i in 0 to 255 loop
+   for j in 0 to 255 loop
+       port_a_i <= std_logic_vector(to_unsigned(j,8));
+       port_b_i <= std_logic_vector(to_unsigned(i,8));
+       while True loop
+            sim_cycle(1);
+            exit when PC_o = X"10"; -- wait start mult
+       end loop;
+       while True loop
+            sim_cycle(1);
+            exit when PC_o = X"D6"; -- wait end mult
+       end loop;
+       test_vecteur(port_a_o & port_b_o, std_logic_vector(to_unsigned(i*j,16)), 10);
 
-  
-   -- X"FF"*X"04" = X"03FC"
-   port_a_i <= X"FF";
-   port_b_i <= X"04";
+   end loop;
+end loop;
    
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"03", 40);
-  test_vecteur(port_b_o, X"FC", 41);
-  
+ port_c_i <= "1000"; -- button 3 => 01=> MULU by hardware
+   for i in 0 to 255 loop
+       for j in 0 to 255 loop
+           port_a_i <= std_logic_vector(to_unsigned(j,8));
+           port_b_i <= std_logic_vector(to_unsigned(i,8));
 
-  
-   -- X"CA"*X"FE" = X"C86C"
-   port_a_i <= X"CA";
-   port_b_i <= X"FE";
+           while True loop
+                sim_cycle(1);
+                exit when PC_o = X"10"; -- wait start mult
+           end loop;
+           while True loop
+                sim_cycle(1);
+                exit when PC_o = X"D6"; -- wait end mult
+           end loop;
+           test_vecteur(port_a_o & port_b_o, std_logic_vector(to_unsigned(i*j,16)), 20);
+       end loop;
+   end loop;
    
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
    
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"C8", 50);
-  test_vecteur(port_b_o, X"6C", 51);
-
-  
-   -- X"DE"*X"CA" = X"AF2C"
-   port_a_i <= X"DE";
-   port_b_i <= X"CA";
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"AF", 60);
-  test_vecteur(port_b_o, X"2C", 61);
-
-  
-   -- X"10"*X"4E" = X"04E0"
-   port_a_i <= X"10";
-   port_b_i <= X"4E";
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"04", 70);
-  test_vecteur(port_b_o, X"E0", 71);
-
-  
-   -- X"0F"*X"4E" = X"0492"
-   port_a_i <= X"0F";
-   port_b_i <= X"4E";
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"04", 80);
-  test_vecteur(port_b_o, X"92", 81);
-  
-    
-   -- X"0F"*X"10" = X"00F0"
-   port_a_i <= X"0F";
-   port_b_i <= X"10";
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-  sim_cycle(30);
-      
-  test_vecteur(port_a_o, X"00", 90);
-  test_vecteur(port_b_o, X"F0", 91);
-  
-      
-   -- X"00"*X"10" = X"0000"
-   port_a_i <= X"00";
-   port_b_i <= X"10";
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"00", 100);
-  test_vecteur(port_b_o, X"00", 101);
-  
-        
-   -- X"10"*X"00" = X"0000"
-   port_a_i <= X"10";
-   port_b_i <= X"00";
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"00"; -- wait start mult
-      end loop;
-   
-      while True loop
-        sim_cycle(1);
-        exit when PC_o = X"76"; -- wait end mult
-      end loop;
-      
-  test_vecteur(port_a_o, X"00", 110);
-  test_vecteur(port_b_o, X"00", 111);
-  
-  
   -- reset
    reset_i      <= '0';
    port_a_i     <= X"00";

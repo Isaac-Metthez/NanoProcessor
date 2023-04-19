@@ -29,10 +29,12 @@ entity Data_Multiplexer is
     RAM_data_i    : in     std_logic_vector(7 downto 0);
     port_a_data_i : in     std_logic_vector(7 downto 0);
     port_b_data_i : in     std_logic_vector(7 downto 0);
+    port_c_data_i : in     std_logic_vector(7 downto 0);
     data_o        : out    std_logic_vector(7 downto 0);
     cs_ram_i      : in     std_logic;
     cs_port_a_i   : in     std_logic;
-    cs_port_b_i   : in     std_logic);
+    cs_port_b_i   : in     std_logic;
+    cs_port_c_i   : in     std_logic);
 end entity Data_Multiplexer;
 
 --------------------------------------------------------------------------------
@@ -50,6 +52,7 @@ begin
 data_o <= RAM_data_i    when cs_ram_i = '1'    else
           port_a_data_i when cs_port_a_i = '1' else
           port_b_data_i when cs_port_b_i = '1' else
+          port_c_data_i when cs_port_c_i = '1' else
           (others => '-');
 
 	  
