@@ -153,10 +153,10 @@ with pc_i select
  
  --  Add part to less significant byte and keep carry  => to result 
          LOADaddr  	    & usiLessResultMul  when	X"4A", 
-         ADDAddr        & usiMulA           when	X"4B",   
+         ADDaddr        & usiMulA           when	X"4B",   
          STOREaddr      & usiLessResultMul  when	X"4C",   
          LOADaddr  	    & usiMostResultMul  when	X"4D", 
-         ADCAddr        & usiTempMul        when	X"4E",  
+         ADCaddr        & usiTempMul        when	X"4E",  
          STOREaddr      & usiMostResultMul  when	X"4F",  
 
  --  Temp values to the power of 2
@@ -290,7 +290,7 @@ with pc_i select
 --Display results---------------------------------------------------------------
 --------------------------------------------------------------------------------
  -- Display Multiplication result
-         LOADaddr       & usiMostResultMul  when	X"C0", 
+         LOADaddr       & usiMostResultMul  when	DISPLAY, 
          STOREaddr      & PortA             when	X"C1",  
          LOADaddr       & usiLessResultMul  when	X"C2", 
          STOREaddr      & PortB             when	X"C3",  
@@ -308,7 +308,7 @@ with pc_i select
 --------------------------------------------------------------------------------
  -- Loop since port a and b are the same
  
-         NEGaddr        & PortA             when	X"D0", 
+         NEGaddr        & PortA             when	WAITIN, 
          ADDaddr        & usiMemPortA       when	X"D1", 
          BZ0            & X"D7"             when	X"D2",
                                                       
