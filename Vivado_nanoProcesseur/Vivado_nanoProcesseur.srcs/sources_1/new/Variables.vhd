@@ -35,6 +35,8 @@ package variables is
   constant usiCounter          : std_logic_vector(7 downto 0) := X"85";
   constant usiMemPorta         : std_logic_vector(7 downto 0) := X"86";
   constant usiMemPortb         : std_logic_vector(7 downto 0) := X"87";
+  constant usiMemPortc         : std_logic_vector(7 downto 0) := X"88";
+  
   
   -- Var const
   constant None                : std_logic_vector(7 downto 0) := X"00";
@@ -45,6 +47,8 @@ package variables is
   constant MaskButton1         : std_logic_vector(7 downto 0) := X"02";
   constant MaskButton2         : std_logic_vector(7 downto 0) := X"04";
   constant MaskButton3         : std_logic_vector(7 downto 0) := X"08";
+  constant RedLed              : std_logic_vector(7 downto 0) := X"0F";
+  constant GreenLed            : std_logic_vector(7 downto 0) := X"F0";
   
   -- Entry
   constant INIT                : std_logic_vector(7 downto 0) := X"00";

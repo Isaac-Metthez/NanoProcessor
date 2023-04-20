@@ -6,6 +6,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use Work.Variables.all;
 
 entity testbench is
 end testbench;
@@ -139,6 +140,8 @@ for i in 0 to 255 loop
    for j in 0 to 255 loop
        port_a_i <= std_logic_vector(to_unsigned(j,8));
        port_b_i <= std_logic_vector(to_unsigned(i,8));
+       
+       
        while True loop
             sim_cycle(1);
             exit when PC_o = X"10"; -- wait start mult
@@ -151,25 +154,27 @@ for i in 0 to 255 loop
 
    end loop;
 end loop;
+test_vecteur(port_c_o, RedLed, 20);
    
- port_c_i <= "1000"; -- button 3 => 01=> MULU by hardware
-   for i in 0 to 255 loop
-       for j in 0 to 255 loop
-           port_a_i <= std_logic_vector(to_unsigned(j,8));
-           port_b_i <= std_logic_vector(to_unsigned(i,8));
+port_c_i <= "1000"; -- button 3 => 01=> MULU by hardware
+for i in 0 to 255 loop
+   for j in 0 to 255 loop
+       port_a_i <= std_logic_vector(to_unsigned(j,8));
+       port_b_i <= std_logic_vector(to_unsigned(i,8));
 
-           while True loop
-                sim_cycle(1);
-                exit when PC_o = X"10"; -- wait start mult
-           end loop;
-           while True loop
-                sim_cycle(1);
-                exit when PC_o = X"D6"; -- wait end mult
-           end loop;
-           test_vecteur(port_a_o & port_b_o, std_logic_vector(to_unsigned(i*j,16)), 20);
+       while True loop
+            sim_cycle(1);
+            exit when PC_o = X"10"; -- wait start mult
        end loop;
+       while True loop
+            sim_cycle(1);
+            exit when PC_o = X"D6"; -- wait end mult
+       end loop;
+       test_vecteur(port_a_o & port_b_o, std_logic_vector(to_unsigned(i*j,16)), 30);
    end loop;
+end loop;
    
+test_vecteur(port_c_o, GreenLed, 40);
    
   -- reset
    reset_i      <= '0';

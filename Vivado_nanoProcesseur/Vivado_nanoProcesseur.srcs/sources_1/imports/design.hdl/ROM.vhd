@@ -248,12 +248,14 @@ with pc_i select
          STOREaddr      & usiMulB           when	X"94", 
          STOREaddr      & usiMemPortb       when	X"95",   
 
+         LOADaddr       & PortC             when	X"96",     
+         STOREaddr      & usiMemPortc       when	X"97", 
 -- return;         
-         INCaddr        & S                 when	X"96",   
-         STOREaddr      & S                 when	X"97",  
-         LOADindconst   & X"FF"             when	X"98", -- load accu-1 
-         STOREaddr      & memRTS            when	X"99", 
-         RTS            & memRTS            when    X"9A",            
+         INCaddr        & S                 when	X"98",   
+         STOREaddr      & S                 when	X"99",  
+         LOADindconst   & X"FF"             when	X"9A", -- load accu-1 
+         STOREaddr      & memRTS            when	X"9B", 
+         RTS            & memRTS            when    X"9C",            
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
@@ -262,27 +264,31 @@ with pc_i select
   -- Get state of button 3 
          LOADaddr 	     & PortC            when	MULSELECTOR, 
          ANDconst        & MaskButton3      when  	X"A1",     
-         BZ1             & X"A9"            when    X"A2",
+         BZ1             & X"AB"            when    X"A2",
  -- hardware multiplication        
-         LOADaddr        & usiMulA          when	X"A3",
-         MULUaddr        & usiMulB          when	X"A4",
-         STOREaddr       & usiLessResultMul when	X"A5",  
-         TFRsecaccu      & none             when	X"A6",
-         STOREaddr       & usiMostResultMul when	X"A7",
-         BRA 	         & X"AF"            when	X"A8", 
+         LOADconst       & GreenLed         when	X"A3", 
+         STOREaddr       & Portc            when	X"A4",     
+         LOADaddr        & usiMulA          when	X"A5",
+         MULUaddr        & usiMulB          when	X"A6",
+         STOREaddr       & usiLessResultMul when	X"A7",  
+         TFRsecaccu      & none             when	X"A8",
+         STOREaddr       & usiMostResultMul when	X"A9",
+         BRA 	         & X"B3"            when	X"AA", 
  -- call software multiplication        
-         DECaddr        & S                 when	X"A9",
-         STOREaddr      & S                 when	X"AA",   
-         TFRaccu        & none              when    X"AB",
-         LOADconst      & X"AF"             when    X"AC",
-         STOREsecaccu   & none              when	X"AD", 
-         BRA            & SOFTWAREMUL       when	X"AE", 
+         LOADconst       & RedLed           when	X"AB", 
+         STOREaddr       & Portc            when	X"AC",    
+         DECaddr         & S                when	X"AD",
+         STOREaddr       & S                when	X"AE",   
+         TFRaccu         & none             when    X"AF",
+         LOADconst       & X"B3"            when    X"B0",
+         STOREsecaccu    & none             when	X"B1", 
+         BRA             & SOFTWAREMUL      when	X"B2", 
 -- return;          
-         INCaddr        & S                 when	X"AF",   
-         STOREaddr      & S                 when	X"B0",  
-         LOADindconst   & X"FF"             when	X"B1", -- load accu-1 
-         STOREaddr      & memRTS            when	X"B2", 
-         RTS            & memRTS            when    X"B3",         
+         INCaddr         & S                when	X"B3",   
+         STOREaddr       & S                when	X"B4",  
+         LOADindconst    & X"FF"            when	X"B5", -- load accu-1 
+         STOREaddr       & memRTS           when	X"B6", 
+         RTS             & memRTS           when    X"B7",         
   -- branch to main
 --------------------------------------------------------------------------------        
    
@@ -310,18 +316,23 @@ with pc_i select
  
          NEGaddr        & PortA             when	WAITIN, 
          ADDaddr        & usiMemPortA       when	X"D1", 
-         BZ0            & X"D7"             when	X"D2",
+         BZ0            & X"DA"             when	X"D2",
                                                       
          NEGaddr        & PortB             when	X"D3", 
          ADDaddr        & usiMemPortB       when	X"D4", 
-         BZ0            & X"D7"             when	X"D5",            
-         BRA            & X"D0"             when	X"D6",
+         BZ0            & X"DA"             when	X"D5",  
+         
+         NEGaddr        & PortC             when	X"D6", 
+         ADDaddr        & usiMemPortC       when	X"D7", 
+         BZ0            & X"DA"             when	X"D8",            
+         
+         BRA            & WAITIN            when	X"D9",
 -- return;          
-         INCaddr        & S                 when	X"D7",   
-         STOREaddr      & S                 when	X"D8",  
-         LOADindconst   & X"FF"             when	X"D9", -- load accu-1 
-         STOREaddr      & memRTS            when	X"DA", 
-         RTS            & memRTS            when    X"DB",    
+         INCaddr        & S                 when	X"DA",   
+         STOREaddr      & S                 when	X"DB",  
+         LOADindconst   & X"FF"             when	X"DC", -- load accu-1 
+         STOREaddr      & memRTS            when	X"DD", 
+         RTS            & memRTS            when    X"DE",    
 --------------------------------------------------------------------------------
 
 
